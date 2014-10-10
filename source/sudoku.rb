@@ -31,9 +31,16 @@ class Sudoku
   def solve!
     current_cell = 0
     until complete?
-      current_cell = find_index_of_next_empty_cell_after(current_cell)
-      possible_values_for_cell = get_possible_values_for_cell(current_cell)
-      fill_in_empty_cell(current_cell, possible_values_for_cell.first) if possible_values_for_cell.size == 1
+      if snapshot &&= @board_string
+         raise "Unsolvable Board!"
+      end
+      for i in 0..1000
+        current_cell = find_index_of_next_empty_cell_after(current_cell)
+        possible_values_for_cell = get_possible_values_for_cell(current_cell)
+        fill_in_empty_cell(current_cell, possible_values_for_cell.first) if possible_values_for_cell.size == 1
+        break if complete?
+      end
+      snapshot = @board_string
     end
   end
 
@@ -46,7 +53,7 @@ class Sudoku
     @board_string.each_char.with_index do |char, column_loop_index|
       populated_column << char if column_loop_index % @cells_per_dimension == cell % @cells_per_dimension
     end
-    return populated_column
+    populated_column
   end
 
   def populate_box_for_cell(cell)
@@ -89,7 +96,7 @@ end
 
 
 ## Tests
-=begin
+
 
 def test(actual, expected, message)
   puts message
@@ -98,6 +105,7 @@ def test(actual, expected, message)
   puts "Expected: #{expected}"
   puts "-----------------------"
 end
+=begin
 
 unsolved_one_missing = '4-5269781682571493197834562826195347374682915951743628519326874248957136763418259'
 solved = '435269781682571493197834562826195347374682915951743628519326874248957136763418259'
@@ -131,3 +139,10 @@ sudoku_2.solve!
 puts sudoku_2
 test(sudoku_2.to_s, solved, 'Solution should match expected')
 =end
+
+unsolved_square_puzzle = '-34141-332-414-2'
+solved = '2341412332141432'
+sudoku_3 = Sudoku.new(unsolved_square_puzzle)
+sudoku_3.solve!
+test(sudoku_3.to_s, solved, 'Solution should match expected')
+
