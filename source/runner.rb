@@ -13,8 +13,9 @@ require_relative 'sudoku'
 # so we call String#chomp to remove them.
 
 
-board_string = File.readlines('sudoku_puzzles.txt').first.chomp
-
-game = Sudoku.new(board_string)
-game.solve
-puts game
+board_string = File.readlines('sudoku_puzzles.txt')
+board_string.each do |string|
+  game = Sudoku.new(string.chomp)
+  game.solve!
+  puts game
+end
