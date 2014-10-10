@@ -16,6 +16,11 @@ require_relative 'sudoku'
 board_string = File.readlines('sudoku_puzzles.txt')
 board_string.each do |string|
   game = Sudoku.new(string.chomp)
-  game.solve!
-  puts game
+  begin
+    game.solve!
+  rescue
+    puts "Unsolvable"
+  else
+    puts game
+  end
 end
