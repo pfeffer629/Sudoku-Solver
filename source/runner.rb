@@ -18,3 +18,20 @@ board_string = File.readlines('sudoku_puzzles.txt').first.chomp
 game = Sudoku.new(board_string)
 game.solve
 puts game
+puts "printing if game has empty cells:"
+puts game.empty_cells?
+puts "prints next empty cell"
+#cell_coords = game.find_next_empty_cell
+puts "testing get_row"
+cell_coords = [4,1]
+test_row = game.get_row(cell_coords)
+puts "testing get_col"
+test_col = game.get_col(cell_coords)
+puts "testing calc remaining nums"
+remaining_nums = game.calc_remaining_nums(test_row, test_col)
+
+puts "testing process remaining num:"
+game.process_remaining_num(remaining_nums,cell_coords)
+puts "printing out board: "
+puts game
+
