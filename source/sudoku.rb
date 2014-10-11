@@ -37,54 +37,59 @@ class Sudoku
    end
 
   def get_row_nums #only returns one specific row 
-  	@row_nums_used = []
-  	row_zero = @sudoku[0]
-  	row_zero.map! do  
+  	@row_zero = @sudoku[0]
+  	@row_nums_used = @row_zero.map do  
   		|n| n[(/\d/)].to_i
   	end
   	#converts nil values to 0 and then remove 0 from array
-  	row_zero.reject! {|nums| nums == 0}
-  	p row_zero
+  	@row_nums_used.reject! {|nums| nums == 0}
   end
 
   def get_column_nums # only returns one specific column
-  	column_zero = @sudoku.transpose[0]
-  	column_zero.map! do  
-  		|n| n[(/\d/)].to_i
-  	end
-  	#converts nil values to 0 and then remove 0 from array
-  	column_zero.reject! {|nums| nums == 0}
-  	p column_zero
+  	@column_zero = @sudoku.transpose[0]
+    @column_nums_used =	@column_zero.map {|n| n[(/\d/)].to_i}
+
+  # #converts nil values to 0 and then remove 0 from array
+   	@column_nums_used.reject! {|nums| nums == 0}
   end
 
-  def get_nums_from_box
-  end
 
-  def check_all_nums
-  	#checks numbers from nums_from_row, nums_from_col, 
-  		#and nums_from box
-  	#compares all those numbers from possible nums 1 to 9
-  	#and returns list of numbers not yet used
+
+
+
+  def get_box_nums
+  	#still need to find syntax for how to collect nums 
+  	#from box
+  	#these are the results we want below for box1
+    @box1_nums = [6,8,1,9]
   end
 
   def remove_used_nums
+  	@possible_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+  	@used_nums = @row_nums_used + @column_nums_used + @box1_nums
+
+  	p @possible_nums - @used_nums.sort! 
+  	#subtracts used_numbers from possible_nums to give unique values
+
+
+  	# compare those numbers to the possible num array
+
+  	# if the number occurs, remove it from possible nums
+
   	#compares list of all numbers used to possible numbers list
   	#as there are duplicates, remove from possible number list
   	#when there is only 1 unused number, put that number into
   	# the empty cell area
   end
 
-  def get_cols
+  def get_columns
     @sudoku.transpose.each do |col|
       col
     end
   end
 
 
-  def get_box
-    box_row = @sudoku[0..2]
-    p box_row
-  end
 
 
   def find_empty_cells
@@ -120,10 +125,12 @@ board = '---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--3
 game = Sudoku.new(board)
 # p game
 # p game.board
-# p "this are the rows #{game.get_rows}"
+game.get_row_nums
+game.get_column_nums
+game.get_box_nums
+# puts "---this is check_all_numbs----"
 puts "-"*20
-# p game.get_row_nums
-p game.get_column_nums
+game.remove_used_nums
 # puts "-"*20
 # p game.find_empty_cells
 # puts "-"*20
