@@ -14,35 +14,32 @@ class Sudoku
            BOX_FOUR, BOX_FIVE, BOX_SIX,
            BOX_SEVEN, BOX_EIGHT, BOX_NINE]
 
-  def initialize #(board_string)
-    @board = '---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---'
-    @board = @board.split("").each_slice(9).to_a
+  def initialize(board_string)
+    # @board = '---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---'
+    @board = board_string
+    p @board = @board.split("").each_slice(9).to_a
   end
 
   def solve
     until !@board.flatten.include?("-")
-      @board.each.with_index do |row, index|
-        row.each.with_index do |element, index|
-          if element == "-"
-            blank_cell << row
-            blank_cell << column
-            return blank_cell
-          end
-          current_blank = find_first_blank
-          numbers_from_column(current_blank)
-          numbers_from_box(current_blank)
-          numbers_from_row(current_blank)
-          match = find_possible_numbers
-          p match
-          if match.length != 1
-            puts "passing too many elements"
-            break
-          else
-            element  = match[0]
+      @board.each.with_index do |row, row_index|
+        row.each.with_index do |element, column_index|
+           if @board[row_index][column_index] == "-"
+            current_blank = []
+            current_blank << row_index
+            current_blank << column_index
+            numbers_from_box(current_blank)
+            numbers_from_column(current_blank)
+            numbers_from_row(current_blank)
+            match =  find_possible_numbers
+            if match.length == 1
+                @board[row_index][column_index] = match[0].to_s
+            end
           end
         end
       end
     end
+    p @board
   end
 
   def board
@@ -69,7 +66,6 @@ class Sudoku
   def numbers_from_box(blank_cell)
     @box_values = []
     blank_cell_string = blank_cell.join("").to_s
-    p blank_cell_string
     BOXES.each.with_index do |box, index|
       box.each.with_index do |value, index|
         if blank_cell_string == value
@@ -110,8 +106,7 @@ class Sudoku
  end
 
   def find_possible_numbers
-
-    p @missings_values=(1..9).to_a - @column_values.join().split("").map(&:to_i) - @row_values.join().split("").map(&:to_i) - @box_values.join().split("").map(&:to_i)
+    @missings_values=(1..9).to_a - @column_values.join().split("").map(&:to_i) - @row_values.join().split("").map(&:to_i) - @box_values.join().split("").map(&:to_i)
   end
 end ### END OF CLASS ####
 
@@ -124,10 +119,3 @@ end ### END OF CLASS ####
 
 
 
-game = Sudoku.new
-#p arr=game.find_first_blank
-# p game.numbers_from_box(arr)
-# p game.numbers_from_row(arr)
-# p game.numbers_from_column(arr)
-# p game.find_possible_numbers
-game.solve
