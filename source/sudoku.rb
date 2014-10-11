@@ -36,7 +36,7 @@ class Sudoku
     end 
    end
 
-  def get_row_nums
+  def get_row_nums #only returns one specific row 
   	@row_nums_used = []
   	row_zero = @sudoku[0]
   	row_zero.map! do  
@@ -47,7 +47,14 @@ class Sudoku
   	p row_zero
   end
 
-  def get_nums_from_column
+  def get_column_nums # only returns one specific column
+  	column_zero = @sudoku.transpose[0]
+  	column_zero.map! do  
+  		|n| n[(/\d/)].to_i
+  	end
+  	#converts nil values to 0 and then remove 0 from array
+  	column_zero.reject! {|nums| nums == 0}
+  	p column_zero
   end
 
   def get_nums_from_box
@@ -115,8 +122,8 @@ game = Sudoku.new(board)
 # p game.board
 # p "this are the rows #{game.get_rows}"
 puts "-"*20
-p game.get_row_nums
-# p game.get_cols
+# p game.get_row_nums
+p game.get_column_nums
 # puts "-"*20
 # p game.find_empty_cells
 # puts "-"*20
