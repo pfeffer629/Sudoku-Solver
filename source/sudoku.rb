@@ -57,14 +57,24 @@ class Sudoku
   	#still need to find syntax for how to collect nums 
   	#from box
   	#these are the results we want below for box1
-    @box1_nums = [6,8,1,9]
+    @box_nums_used = {
+    :box1_nums => [6,8,1,9],
+    :box2_nums => [2,6,7,4],
+    :box3_nums => [7,1,9,5],
+    :box4_nums => [8,2,4,5],
+    :box5_nums => [1,6,2,3],
+    :box6_nums => [4,9,2,8],
+    :box7_nums => [9,4,7,3],
+    :box8_nums => [3,5,1,8],
+    :box9_nums => [7,4,3,6]
+  }
   end
 
   def remove_used_nums
   	@possible_nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-  	p @used_nums = @row_nums_used + @column_nums_used + @box1_nums
-
+  	p @used_nums = @row_nums_used + @column_nums_used #+ @box1_nums
+  	p "*"*50
   	p @unique_nums = @possible_nums - @used_nums.sort! 
   	#subtracts used_numbers from possible_nums to give unique values
 
@@ -150,8 +160,8 @@ game.find_empty_cells
 puts "-"*40
 p game.get_row_nums
 p game.get_column_nums
-# p game.get_box_nums
-# p game.remove_used_nums
+p game.get_box_nums
+p game.remove_used_nums
 
 # p game.change_blank_cells
 
