@@ -4,13 +4,13 @@ class Sudoku
 
   box1 = [[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]
   box2 = [[0,3],[0,4],[0,5],[1,3],[1,4],[1,5],[2,3],[2,4],[2,5]]
-  box3 = [[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]
-  box4 = [[3,0],[3,1],[3,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]
-  box2 = [[0,3],[0,4],[0,5],[1,3],[1,4],[1,5],[2,3],[2,4],[2,5]]
-  box3 = [[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]
-   box1 = [[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]
-  box2 = [[0,3],[0,4],[0,5],[1,3],[1,4],[1,5],[2,3],[2,4],[2,5]]
-  box3 = [[0,0],[0,1],[0,2],[1,0],[1,1],[1,2],[2,0],[2,1],[2,2]]
+  box3 = [[0,6],[0,7],[0,8],[1,6],[1,7],[1,8],[2,6],[2,7],[2,8]]
+  box4 = [[3,0],[3,1],[3,2],[4,0],[4,1],[4,2],[5,0],[5,1],[5,2]]
+  box5 = [[3,3],[3,4],[3,5],[4,3],[4,4],[4,5],[5,3],[5,4],[5,5]]
+  box6 = [[3,6],[3,7],[3,8],[4,6],[4,7],[4,8],[5,6],[5,7],[5,8]]
+  box7 = [[6,0],[6,1],[6,2],[7,0],[7,1],[7,2],[8,0],[8,1],[8,2]]
+  box8 = [[6,3],[6,4],[6,5],[7,3],[7,4],[7,5],[8,3],[8,4],[8,5]]
+  box9 = [[6,6],[6,7],[6,8],[7,6],[7,7],[7,8],[8,6],[8,7],[8,8]]
 
   def initialize(board_string)
     @board_string = board_string
@@ -39,7 +39,7 @@ class Sudoku
   end
 
   def next_empty_cell_index
-    board.flatten.find_index{|cell| cell == "-"}
+    board.flatten.find_index{ |cell| cell == "-" }
   end
 
   def set_current_empty_cell_coords
@@ -47,15 +47,12 @@ class Sudoku
     index = next_empty_cell_index
     coordinates << @current_row_index = index/9
     coordinates << @current_col_index = index%9
-
-    # @coordinates = [@current_row_index,@current_col_index]
   end
 
   def get_column()
     column_results = []
     board.each.with_index do |row, row_index|
-      # row.each.with_index do |element, column_index|
-
+      column_results << board[row_index][coordinates[1]]
       print board[row_index][coordinates[1]]
       puts
     end
@@ -70,8 +67,19 @@ class Sudoku
     end
   end
 
-  def get_box
+  def get_current_box
+    jkas;dlkfja;lskdfja;lskdfj# current_box = (@current_cell_index/27)*3 + (@current_cell_index%9)/3
+    # @box_index_lookup[current_box].map { |index| @board[index] }
+  end
+    box_results = board[1..3].transpose[0..-7]
     board[1..3].transpose[0..-7]
+  end
+
+
+  def find_possible_numbers
+    @column_results.gsub("-",nil)
+    @row_results.gsub("-",nil)
+    @missing_results=(1..9).to_a - @column_results.join().split("").map(&:to_i) - row_results.join().split("").map(&:to_i) - @box_results.join().split("").map(&:to_i)
   end
 
   def solve
@@ -80,6 +88,11 @@ class Sudoku
     get_column(my_coor)
     get_row(my_coor)
     get_box
+    find_possible_numbers
+      if @missing_results == 1
+        board[coordinates] << @missing_results
+      end
+
     until solved?
       set_current_empty_cell_coords
       exit
