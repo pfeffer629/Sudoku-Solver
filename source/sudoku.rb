@@ -57,25 +57,51 @@ class Sudoku
   	#still need to find syntax for how to collect nums 
   	#from box
   	#these are the results we want below for box1
-    @box_nums_used = {
-    :box1_nums => [6,8,1,9],
-    :box2_nums => [2,6,7,4],
-    :box3_nums => [7,1,9,5],
-    :box4_nums => [8,2,4,5],
-    :box5_nums => [1,6,2,3],
-    :box6_nums => [4,9,2,8],
-    :box7_nums => [9,4,7,3],
-    :box8_nums => [3,5,1,8],
-    :box9_nums => [7,4,3,6]
-  }
-  end
+    @box_nums_used = [
+	   [6,8,1,9], #box_nums_used[0]
+	   [2,6,7,4], #box_nums_used[1]
+	   [7,1,9,5], #box_nums_used[2]
+	   [8,2,4,5], #box_nums_used[3]
+	   [1,6,2,3], #box_nums_used[4]
+	   [4,9,2,8], #box_nums_used[5]
+	   [9,4,7,3], #box_nums_used[6]
+	   [3,5,1,8], #box_nums_used[7]
+	   [7,4,3,6]  #box_nums_used[8]
+	  ]
+	  end
 
   def remove_used_nums
   	@possible_nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-  	p @used_nums = @row_nums_used + @column_nums_used #+ @box1_nums
-  	p "*"*50
-  	p @unique_nums = @possible_nums - @used_nums.sort! 
+  	p "-_-"*50
+  	
+  	# p "*"*50
+  	# p @column_nums_used
+  	# p "-"*50
+  	# p @box_nums_used
+  	p "_"*50
+
+  	p @coords.each_with_index do |coordinates|
+  		p @row_nums_used[0], @column_nums_used[1]
+  	end
+
+	   @answers = []
+	  #answers would be the keyvalues for each empty key
+
+	  #for example [0,0] would be used_row_nums[0], 
+	   #used_column_nums[0], box_nums[0] 
+
+	  #add all those numbers together and subtract from 
+	  # possible numbers array
+
+  	@replacement_nums = Hash[@coords.zip(@answers)]
+
+  	
+
+  	# p @used_nums = @row_nums_used + @column_nums_used + @box_nums_used
+  	
+  	# p @replacement_nums = Hash[@coords.zip(@used_nums)]
+  	# p @unique_nums = @possible_nums - @used_nums.sort! 
   	#subtracts used_numbers from possible_nums to give unique values
 
   	#create a hash to represent the unique numbers for
@@ -125,16 +151,16 @@ class Sudoku
 
   #replace the numbers left over into the coordintes
 
-  p new_nums = Array.new(@coords.length)
+  # p new_nums = Array.new(@coords.length)
 	
-	p replacement_nums = Hash[@coords.zip(new_nums)]
+	# p @replacement_nums = Hash[@coords.zip(new_nums)]
   
-  # this method will replace each empty cell with an array
-  #  of possible numbers
+ #  # this method will replace each empty cell with an array
+ #  #  of possible numbers
 
-  replacement_nums.each {|key, value| replacement_nums[key] = @unique_nums}
-  # puts "-"*20
-  # p replacement_nums
+ #  replacement_nums.each {|key, value| replacement_nums[key] = @unique_nums}
+ #  # puts "-"*20
+ #  # p replacement_nums
   	
   end
 
