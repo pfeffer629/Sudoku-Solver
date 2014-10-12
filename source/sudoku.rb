@@ -26,36 +26,32 @@ class Sudoku
     @sudoku = @board_string.chars.each_slice(9).to_a
   end
 
-  def solve
-    possibilities = (1..9).to_a
-  end
-
-  def get_rows
-    @sudoku.each do |row|
-     row
-    end 
-   end
 
   def get_row_nums #only returns one specific row 
-  	@row_zero = @sudoku[0]
-  	@row_nums_used = @row_zero.map do  
-  		|n| n[(/\d/)].to_i
-  	end
+  	#for each coordinate in empty_num, get all the numbes
+  	# that have aleady been used in that row
+  	@row_nums_used = @sudoku.map do |row|
+  										row.map do
+  										  
+  										|n| n[(/\d/)].to_i
+  									end
+  								end
   	#converts nil values to 0 and then remove 0 from array
-  	@row_nums_used.reject! {|nums| nums == 0}
+
+  	# @total_rows = (0..8).to_a
+  	# p "-"*30
+  	# row_nums_used = Hash[@total_rows.zip(@row_nums_used)]
   end
 
   def get_column_nums # only returns one specific column
-  	@column_zero = @sudoku.transpose[0]
-    @column_nums_used =	@column_zero.map {|n| n[(/\d/)].to_i}
-
-  # #converts nil values to 0 and then remove 0 from array
-   	@column_nums_used.reject! {|nums| nums == 0}
+  	@column_nums_used = @sudoku.transpose.map do |column|
+    										column.map  do 
+    											|n| n[(/\d/)].to_i
+    										end
+    									end
+    									p "*"*55
+    									p @column_nums_used
   end
-
-
-
-
 
   def get_box_nums
   	#still need to find syntax for how to collect nums 
@@ -65,22 +61,24 @@ class Sudoku
   end
 
   def remove_used_nums
-  	@possible_nums = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  	@possible_nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-  	@used_nums = @row_nums_used + @column_nums_used + @box1_nums
+  	p @used_nums = @row_nums_used + @column_nums_used + @box1_nums
 
-  	p @possible_nums - @used_nums.sort! 
+  	p @unique_nums = @possible_nums - @used_nums.sort! 
   	#subtracts used_numbers from possible_nums to give unique values
 
+  	#create a hash to represent the unique numbers for
+  	# the empty numbers
 
-  	# compare those numbers to the possible num array
+  	# the key will be the coordinates, the value will be
+  	# the unique_nums array
 
-  	# if the number occurs, remove it from possible nums
+  	# when the unique_nums.length == 1, return the number
+  	  #in that array
 
-  	#compares list of all numbers used to possible numbers list
-  	#as there are duplicates, remove from possible number list
-  	#when there is only 1 unused number, put that number into
-  	# the empty cell area
+  	# otherwise, continue to go through the array
+
   end
 
   def get_columns
@@ -93,17 +91,42 @@ class Sudoku
 
 
   def find_empty_cells
-    coords = []
+    @coords = []
     @sudoku.each_with_index do |_,row_index|
     @sudoku[row_index].each_with_index do |val, col_index|
       if val == "-"
-        coords << [row_index, col_index]
+        @coords << [row_index, col_index]
       end
       end
     end
-    p coords
+    p @coords
   end
 
+  def change_blank_cells
+   
+  #go through all the coords empty coordsnates
+
+  #at each empty coordinate get the row_nums, column_nums
+   #and box_nums
+
+  #put row_num, column_nums and box_nums into an array
+
+  #subtract that array from possible_nums
+
+  #replace the numbers left over into the coordintes
+
+  p new_nums = Array.new(@coords.length)
+	
+	p replacement_nums = Hash[@coords.zip(new_nums)]
+  
+  # this method will replace each empty cell with an array
+  #  of possible numbers
+
+  replacement_nums.each {|key, value| replacement_nums[key] = @unique_nums}
+  # puts "-"*20
+  # p replacement_nums
+  	
+  end
 
 
   # def check_column
@@ -123,17 +146,12 @@ end
 board = '---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---'
 
 game = Sudoku.new(board)
-# p game
-# p game.board
-game.get_row_nums
-game.get_column_nums
-game.get_box_nums
-# puts "---this is check_all_numbs----"
-puts "-"*20
-game.remove_used_nums
-# puts "-"*20
-# p game.find_empty_cells
-# puts "-"*20
-# game.check_row
-# puts "-"*20
-# game.get_box
+game.find_empty_cells
+puts "-"*40
+p game.get_row_nums
+p game.get_column_nums
+# p game.get_box_nums
+# p game.remove_used_nums
+
+# p game.change_blank_cells
+
