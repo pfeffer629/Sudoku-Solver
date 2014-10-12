@@ -19,9 +19,19 @@ Steps:
         - push board_string into an array by splitting it by ""
         - batch string into sub-arrays by num_inner_rows (see notation on tic tac toe)
     *- board_string_to_boxes:
-      - input: board_string (input as string)
+      - input: board_string (input as array of "")
       - output: n boxes, each box is an array of the n elements in that box
       - steps:
+        - create an index_array that has 0-3
+        - set a counter to 0
+        - while counter is less than 3
+          - push 3 elements into index in @boxes
+        - add 3 to each element in index_array
+        - increment counter
+
+
+
+
         - declare counter variable that starts on an even number
         - copy board_string to new variable
         - when counter is even shift sqrt n elements off of board_string into box1
@@ -37,10 +47,11 @@ Steps:
 
 STOP
 
-2. CHECK FOR ANY EMPTY CELLS - condition to break loop
+2. CHECK FOR ANY EMPTY CELLS - condition to break loop, break once false
   * is_empty?:
     - input: n/a
-    - output: true if == '-' false otherwise
+    - output: true if contains '-' false otherwise
+
 
 3. FIND POSITION OF EMPTY CELL - begin loop
   * empty_square_coordinates
@@ -70,13 +81,16 @@ STOP
       - take @boxes[num], for each num in array [1-9] if num not in boxes array and not already in possiblibites, add to possibilities
 
   * solve
-    - iterate over @board with two each loops
-      - if the element is empty:
-        - length of poss == 1
-          - sub character
-        - if not on to next
-      - if not empty
-        next element
+    - prepare board
+    - run loop that will break if empty is false
+      - get empty square
+      - check row
+      - check col
+      - check box
+      - @poss uniq
+      - subtract @poss from [1-9]
+      - fill empty space
+    - return board, format?
 
 5. FIND POSSIBLE VALUES
 
