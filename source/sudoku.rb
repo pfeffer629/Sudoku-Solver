@@ -31,7 +31,7 @@ class Sudoku
     POSSIBLE_VALUES - get_row(row) - get_col(col) - get_box(row, col)
   end
 
-  def write_value array row, col
+  def write_value array, row, col
     @board[row][col] = array.first
   end
 
@@ -92,6 +92,6 @@ class Sudoku
   end
 end
 
-sudocode = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
-sudocode.solve
-puts sudocode
+# sudocode = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
+# sudocode.solve
+# puts sudocode
