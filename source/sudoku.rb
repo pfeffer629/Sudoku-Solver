@@ -1,3 +1,32 @@
+=begin 
+
+#Brick's pseudocode
+
+1. create board
+
+2. test if complete
+
+3. Find next empty
+
+4. find all related cells
+			-row
+			-column
+			-box
+
+5. screen related and test for unique 
+
+6. if unique solution
+		enter it
+	 if not start at step 2 again and go through
+	 same process
+
+
+=end
+
+
+
+
+
 # initialize board string
 # prepare board with board method
 
