@@ -98,7 +98,12 @@ class Sudoku
 
   	@replacement_nums = Hash[@coords.zip(@answers)]
 
+  	p @replacement_nums[[0,0]] = @possible_nums - (@row_nums_used[0] + @column_nums_used[0] + @box_nums_used[0])
 
+  	p @replacement_nums[[0,1]] = @possible_nums - (@row_nums_used[0] + @column_nums_used[1] + @box_nums_used[0])
+
+  	p @replacement_nums[[0,2]] = @possible_nums - (@row_nums_used[0] + @column_nums_used[2] + @box_nums_used[0])
+  	#p @replacement_nums[@coords[0]] = @used_row_nums 
 
   	# p @used_nums = @row_nums_used + @column_nums_used + @box_nums_used
   	
