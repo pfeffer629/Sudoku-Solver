@@ -85,7 +85,7 @@ class Sudoku
   		p @row_nums_used[0], @column_nums_used[1]
   	end
 
-	   @answers = []
+	   @answers = []	
 	  #answers would be the keyvalues for each empty key
 
 	  #for example [0,0] would be used_row_nums[0], 
@@ -94,9 +94,11 @@ class Sudoku
 	  #add all those numbers together and subtract from 
 	  # possible numbers array
 
+	  @answers = []
+
   	@replacement_nums = Hash[@coords.zip(@answers)]
 
-  	
+
 
   	# p @used_nums = @row_nums_used + @column_nums_used + @box_nums_used
   	
