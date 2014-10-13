@@ -1,7 +1,6 @@
 class Sudoku
   def initialize(board_string)
-    @board_string = board_string
-    @board = @board_string.split('').each_slice(9).to_a
+    @board = board_string.split('').each_slice(9).to_a
   end
 
   def solve
