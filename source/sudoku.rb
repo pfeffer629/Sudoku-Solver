@@ -41,10 +41,6 @@ class Sudoku
     end
   end
 
-  def cell_empty?(digit)
-    true if digit == "-"
-  end
-
   def fill_cells_if_possible
     @board.each_with_index do |row, row_i|
       row.each_with_index do |cell_value, col_i|
@@ -53,6 +49,10 @@ class Sudoku
         end
       end
     end
+  end
+
+  def cell_empty?(digit)
+    true if digit == "-"
   end
 
   def find_possible_nums(cell_coord)
