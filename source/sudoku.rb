@@ -95,8 +95,9 @@ class Sudoku
 
 	  @answers = []
 
-  	@replacement_nums = Hash[@coords.zip(@answers)]
+  	p @replacement_nums = Hash[@coords.zip(@answers)]
 
+  	p "*" * 50
   	p @replacement_nums[[0,0]] = @possible_nums - (@row_nums_used[0] + @column_nums_used[0] + @box_nums_used[0])
 
   	p @replacement_nums[[0,1]] = @possible_nums - (@row_nums_used[0] + @column_nums_used[1] + @box_nums_used[0])
@@ -109,6 +110,7 @@ class Sudoku
   	
   	p @replacement_nums[[4,0]] = @possible_nums - (@row_nums_used[4] + @column_nums_used[0] + @box_nums_used[3])
   	
+  	p @replacement_nums
   	# @replacement_nums[[row_coord, column_coord]] = @possible_nums - (@row_nums_used[row_coord] + @column_nums_used[column_coord] + @box_nums_used[box_nums])
 
   			#need to give box num a range
