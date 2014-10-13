@@ -49,8 +49,7 @@ class Sudoku
     											|n| n[(/\d/)].to_i
     										end
     									end
-    									p "*"*55
-    									p @column_nums_used
+    									 
   end
 
   def get_box_nums
@@ -81,7 +80,7 @@ class Sudoku
   	# p @box_nums_used
   	p "_"*50
 
-  	p @coords.each_with_index do |coordinates|
+  	@coords.each_with_index do |coordinates|
   		p @row_nums_used[0], @column_nums_used[1]
   	end
 
@@ -103,6 +102,27 @@ class Sudoku
   	p @replacement_nums[[0,1]] = @possible_nums - (@row_nums_used[0] + @column_nums_used[1] + @box_nums_used[0])
 
   	p @replacement_nums[[0,2]] = @possible_nums - (@row_nums_used[0] + @column_nums_used[2] + @box_nums_used[0])
+  	
+  	p @replacement_nums[[1,2]] = @possible_nums - (@row_nums_used[1] + @column_nums_used[2] + @box_nums_used[0])
+  	
+  	p @replacement_nums[[2,2]] = @possible_nums - (@row_nums_used[2] + @column_nums_used[2] + @box_nums_used[0])
+  	
+  	p @replacement_nums[[4,0]] = @possible_nums - (@row_nums_used[4] + @column_nums_used[0] + @box_nums_used[3])
+  	
+  	# @replacement_nums[[row_coord, column_coord]] = @possible_nums - (@row_nums_used[row_coord] + @column_nums_used[column_coord] + @box_nums_used[box_nums])
+
+  			#need to give box num a range
+  				# if row_coords >= 0 || row_coords <=2
+  						#box_nums_used[0]
+  					# elsif row_coords >=3 || row_coord <=5
+  					# 	box_nums_used[1]
+  					# elsif row_coord >=6 || row_coord <=9
+  					# 	box_nums_used[2]
+  						
+  						
+
+
+
   	#p @replacement_nums[@coords[0]] = @used_row_nums 
 
   	# p @used_nums = @row_nums_used + @column_nums_used + @box_nums_used
@@ -191,9 +211,9 @@ board = '---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--3
 game = Sudoku.new(board)
 game.find_empty_cells
 puts "-"*40
-p game.get_row_nums
-p game.get_column_nums
-p game.get_box_nums
+game.get_row_nums
+game.get_column_nums
+game.get_box_nums
 p game.remove_used_nums
 
 # p game.change_blank_cells
