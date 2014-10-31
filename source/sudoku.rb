@@ -35,6 +35,21 @@ class Sudoku
     constructed_column #return the whole column
   end
 
+  def find_next_empty_cell(index)
+    board_string_copy = @board_string.split("") #protect our original data
+    index+=1 #skip to the next index right off the bat.
+    until board_string_copy[index] == '-' do #keep skipping to the next index until we find a '-'
+      index += 1
+    end
+    index #return the index of the next '-' we find.
+  end
+
+  def collect_numbers(index)
+    my_row = get_row(index) #get an array of characters on the row. There will be "-"s included
+    my_column = get_column(index) ##get an array of characters on the column. There will be "-"s included
+    results = (my_row + my_column).select { |cell| cell != '-'  } #add everything together and eliminate "-"
+    results.uniq! #de duplicate
+  end
   # Returns a nicely formatted string representing the current state of the board
   def to_s
   end
@@ -52,13 +67,17 @@ test_board = "4-5269781
               489571367
               634182594"
 =end
-test_board = "4-5269781682574931978345628261953473746829159517436285193268742489571367634182594"
+test_board = "----657816825-4931978345628261953473746829159517436285193268742489571367634182594"
 game = Sudoku.new(test_board)
 p game.get_row(6) == game.get_row(8) #calling get_row with index on same row should get same result.
 p game.get_row(13) == game.get_row(10)
 p game.get_column(0) == game.get_column(54) #calling get_column with an index on the same column, you should get the same column!
 p game.get_column(50) == game.get_column(77)
 
+p game.find_next_empty_cell(0) #=> 1
+p game.find_next_empty_cell(1) # => 2
+p game.find_next_empty_cell(2) # => 3
+p game.find_next_empty_cell(3) # => 13
 
 
 
