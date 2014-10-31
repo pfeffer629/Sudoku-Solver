@@ -42,25 +42,15 @@ Define a box method
 
 Define a solved? method
 
+
+
 Define a to_s method
 
-
----26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---
-
-arraytest = "---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---"
-board_string = arraytest.gsub(/\D/){0}.split(//)
-
-
-  def extract_row_values
-    @extracted_values = array_test.slice(9)
-    @extracted_values.select {|num| num != 0}   # Might have to call destructive
-  end
-
-  def extract_column_values(col_num)
-    @column = []
-    @column << @extracted_values
-      # 9.times do |col|
-        @column[0..8].each { |num| p num[col_num] }
+Define find_next_empty_cell
+  I. Iterate through each sub array.
+  II. If we find zero,
+     a. Return coordinate.
+     b. Store coordinate in data structure
 
 =end
 
@@ -112,17 +102,6 @@ class Sudoku
      p @board_string.each_slice(3) {|slice| @box_slice_values << slice }
   end
 
-# [["0", "0", "0", "2", "6", "0", "7", "0", "1"],
-# ["6", "8", "0", "0", "7", "0", "0", "9", "0"],
-# ["1", "9", "0", "0", "0", "4", "5", "0", "0"],
-# ["8", "2", "0", "1", "0", "0", "0", "4", "0"],
-# ["0", "0", "4", "6", "0", "2", "9", "0", "0"],
-# ["0", "5", "0", "0", "0", "3", "0", "2", "8"],
-# ["0", "0", "9", "3", "0", "0", "0", "7", "4"],
-# ["0", "4", "0", "0", "5", "0", "0", "3", "6"],
-# ["7", "0", "3", "0", "1", "8", "0", "0", "0"]]
-
-
   def comparison?
     alpha_numeric_index = (1..9).to_a
     collated_values = @extracted_values + alpha_numeric_index   # Class variables - Might have to change later
@@ -137,8 +116,21 @@ class Sudoku
     end
   end
 
-  # def board
-  # end
+  def find_next_empty_cell #If this works, we then need to write a method to find the unique value and ultimtely insert that value into out board
+     @board.each do |row| # Accessing the rows
+        row.each do |cell|
+          if cell == "0"
+            puts "YAAAAAY!!!"
+          end
+        end
+      end
+  end
+
+
+
+  def board
+    @board
+  end
 
   # Returns a nicely formatted string representing the current state of the board
   def to_s
@@ -156,19 +148,19 @@ end
 # ["7", "0", "3", "0", "1", "8", "0", "0", "0"]]
 
 
-test_game = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
-p test_game.board.first == ["0", "0", "0", "2", "6", "0", "7", "0", "1"]
-p test_game.board.last ==  ["7", "0", "3", "0", "1", "8", "0", "0", "0"]
+# test_game = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
+# p test_game.board.first == ["0", "0", "0", "2", "6", "0", "7", "0", "1"]
+# p test_game.board.last ==  ["7", "0", "3", "0", "1", "8", "0", "0", "0"]
 
-p test_game.extract_row_values(5) == ["0", "5", "0", "0", "0", "3", "0", "2", "8"]
-p test_game.extract_column_values(0) == ["0", "6", "1", "8", "0", "0", "0", "0", "7"]
+# p test_game.extract_row_values(5) == ["0", "5", "0", "0", "0", "3", "0", "2", "8"]
+# p test_game.extract_column_values(0) == ["0", "6", "1", "8", "0", "0", "0", "0", "7"]
 
 
 test_game = Sudoku.new("4-5269781682571493197834562826195347374682915951743628519326874248957136763418259")
 
-test_game.find_next_empty_cell  # => sets coords for an empty cell
+p test_game.find_next_empty_cell  # => sets coords for an empty cell
 
-p test_game.extract_row_values(5) # == ["0", "5", "0", "0", "0", "3", "0", "2", "8"]
-p test_game.extract_column_values(0) # == ["0", "6", "1", "8", "0", "0", "0", "0", "7"]
+# p test_game.extract_row_values(5) # == ["0", "5", "0", "0", "0", "3", "0", "2", "8"]
+# p test_game.extract_column_values(0) # == ["0", "6", "1", "8", "0", "0", "0", "0", "7"]
 
 # test_game.extract_box_values
