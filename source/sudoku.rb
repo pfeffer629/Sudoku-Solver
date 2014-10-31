@@ -9,17 +9,17 @@ class Sudoku
   def board
   end
 
-  def get_row(index)
-    row_index = index
-    constructed_row = []
+  def get_row(index) #pass index from @board_string
+    row_index = index #preserve index, make a copy of it and do stuff to the copy
+    constructed_row = [] #this array will hold all the numbers in our row
     until row_index % 9 == 0 || row_index == 0 # given an index in a row keep moving left until we find the beginning of the row
-      row_index -= 1
+      row_index -= 1 #walk backwards
     end
-    9.times do
-      constructed_row << @board_string[row_index]
-      row_index += 1
+    9.times do #starting from beginning of row
+      constructed_row << @board_string[row_index] #load the characters in the row into our array
+      row_index += 1 #move to next cell in the row
     end
-    constructed_row
+    constructed_row #return array of characters
   end
   # Returns a nicely formatted string representing the current state of the board
   def to_s
