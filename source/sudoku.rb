@@ -39,6 +39,21 @@ Define a to_s method
 
 ---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---
 
+arraytest = "---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---"
+board_string = arraytest.gsub(/\D/){0}.split(//)
+
+
+  def extract_row_values
+    @extracted_values = array_test.slice(9)
+    @extracted_values.select {|num| num != 0}   # Might have to call destructive
+  end
+
+  def extract_column_values(col_num)
+    @column = []
+    @column << @extracted_values
+      # 9.times do |col|
+        @column[0..8].each { |num| p num[col_num] }
+
 =end
 
 
@@ -46,30 +61,46 @@ Define a to_s method
 
 class Sudoku
   def initialize(board_string)
-    @board_string = board_string.gsub(/\D/){0}split(//)
+    @board_string = board_string.gsub(/\D/){0}.split(//)
     @display_board = board_string.split(//).clone
     @extracted_values = []
+     @unsolved_board = []
+     p @board_string.each_slice(8) {|slice| @unsolved_board << slice}
+
      # Split the string into separate arrays.
   end
 
   def extract_values(number)
 
-    array[9][9]
+    # row = (number / 9) * 9 # sets initial row to 0
+    # column = row % 9 #
 
-    row = (number / 9) * 9 # sets initial row to 0
-    column = row % 9 #
+    # 9.times do |num|
+    #   value = @board_string[num]
   end
 
   def extract_row_values
-    @extracted_values = @board_string.slice(9)
-    @extracted_values.select {|num| num != 0}   # Might have to call destructive
+    # @extracted_values = @board_string.slice(9)
+    # @extracted_values.select {|num| num != 0}   # Might have to call destructive
+    # counter = 0
+    # while counter < 9
+    #   num = 0
+    #   @board_string.slice(num, 9)mu
+
+
+    #   counter += 1
+    # end
+
+
+
   end
 
-  def extract_column_values
+  def extract_column_values(col_num)
     @column = []
     @column << @extracted_values
-    p @column
-
+      # 9.times do |col|
+        # @column[0..8].each { |num| p num[col_num] }
+ # board_string[0..8].each { |num| p num[col_num] }
   end
 
   def extract_box_values
@@ -98,4 +129,7 @@ class Sudoku
   end
 end
 
+
+
+p test = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
 
