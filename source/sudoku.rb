@@ -48,7 +48,7 @@ class Sudoku
     my_row = get_row(index) #get an array of characters on the row. There will be "-"s included
     my_column = get_column(index) ##get an array of characters on the column. There will be "-"s included
     results = (my_row + my_column).select { |cell| cell != '-'  } #add everything together and eliminate "-"
-    results.uniq! #de duplicate
+    results.uniq! #de-duplicate the results and return.
   end
   # Returns a nicely formatted string representing the current state of the board
   def to_s
