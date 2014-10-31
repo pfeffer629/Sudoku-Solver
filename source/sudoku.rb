@@ -21,13 +21,45 @@ class Sudoku
     end
     constructed_row #return array of characters
   end
+
+  def get_column(index)
+    column_index = index #copy index of the cell on the board
+    constructed_column = [] #create empty array that will hold our column
+    until column_index >= 0 && column_index <= 8 #move up the column until you know you're at the top row(top row is 0-8)
+        column_index -= 9
+    end
+    9.times do
+      constructed_column << @board_string[column_index] #shovel each cell in the column
+      column_index += 9 #move one cell down
+    end
+    constructed_column #return the whole column
+  end
+
   # Returns a nicely formatted string representing the current state of the board
   def to_s
   end
 end
 
 
-
-test_board = "4-526978168257493197834562826195347374682915951743628519326874248957136763418259"
+=begin
+test_board = "4-5269781
+              682574931
+              978345628
+              261953473
+              746829159
+              517436285
+              193268742
+              489571367
+              634182594"
+=end
+test_board = "4-5269781682574931978345628261953473746829159517436285193268742489571367634182594"
 game = Sudoku.new(test_board)
-p game.get_row(6)
+p game.get_row(6) == game.get_row(8) #calling get_row with index on same row should get same result.
+p game.get_row(13) == game.get_row(10)
+p game.get_column(0) == game.get_column(54) #calling get_column with an index on the same column, you should get the same column!
+p game.get_column(50) == game.get_column(77)
+
+
+
+
+
