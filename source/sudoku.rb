@@ -1,19 +1,30 @@
 class Sudoku
+  attr_reader :rows, :columns, :board_string
   def initialize(board_string)
     @board_string = board_string
-
+    @column_array = []
   end
-  def create_rows
+  def create_rows #array of 9 arrays of 9 strings
     # @array_of_strings_rows = @board_string.scan(/.{1,9}/m)
-    @board_string.split('').each_slice(9).to_a
+    @rows = @board_string.split('').each_slice(9).to_a
   end
 
-  def split_into_cells
-    @array_of_strings_rows.each do |string|
-      string.split(//)
+  def single_column(column)
+    @rows.map { |rows| rows[column] }
+  end
+
+  def create_columns
+    9.times do |i|
+      @column_array << create_column(i)
     end
+      @column_array
   end
 
+  def
+
+  def split_into_cells #
+     @board_string.split('').each_slice(1).to_a
+  end
 
   def solve
   end
@@ -29,8 +40,17 @@ end
 
 board1 = Sudoku.new('---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---')
 
+puts "Test create_rows"
 p board1.create_rows
+
+puts "Test create_columns"
+
+# p board1.create_column
+
+p board1.collect_columns
+# puts "Test split_into_cells"
 # p board1.split_into_cells
+
 #access the first row
 # p board1.create_rows[0]
 
