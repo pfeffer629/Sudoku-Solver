@@ -12,14 +12,11 @@ class Sudoku
   end
 
   def convert_board_string
-    chars_with_quad = @board_string.chars.map.with_index do |char, i|
-      [char, (((i / 27) * 3 + (i % 9) / 3))]
-    end
-    chars_with_quad.each_slice(9) {|row| @board << row }
+    @board_string.chars.each_slice(9) {|row| @board << row }
   end
 
   def solved?
-    board.each { |row| row.each { |cell| return false if cell.first == "-" } }
+    board.each { |row| row.each { |cell| return false if cell == "-" } }
     true
   end
 
@@ -27,7 +24,7 @@ class Sudoku
     @empty_cells = []
     board.each_index do |row_i|
       board[row_i].each_index do |col_i|
-        if board[row_i][col_i].first == '-'
+        if board[row_i][col_i] == '-'
           @empty_cells << [row_i, col_i]
         end
       end
@@ -35,32 +32,33 @@ class Sudoku
   end
 
   def row_values row
-    board[row].map(&:first)
+    board[row]
   end
 
   def col_values col
-    board.map { |row| row[col].first }
+    board.map { |row| row[col] }
   end
 
   def quad_values quadrant
     values = []
     board.each_index do |row_i|
       board[row_i].each_index do |col_i|
-        values <<  board[row_i][col_i].first if board[row_i][col_i].last == quadrant
+        values <<  board[row_i][col_i] if get_cell_quadrant(row_i, col_i) == quadrant
       end
     end
     values
   end
 
   def get_cell_quadrant row_i, col_i
-    board[row_i, col_i].last
+    i = ((row_i + 1) * 8) + (col_i +1 )
+    (i / 27) * 3 + (i % 9) / 3
     # (col_i / 3 + 1 ) * (row_i / 3 + 1)
   end
 
   def get_cell_non_candidates row_i, col_i
     @related_cell_values = nil
     @related_cell_values = row_values(row_i) +
-                           col_values(col_i)
+                           col_values(col_i) +
                            quad_values(get_cell_quadrant(row_i,col_i))
     @related_cell_values.delete('-')
     @related_cell_values
@@ -74,12 +72,12 @@ class Sudoku
 
   def solve
     until solved?
-      binding.pry
       find_all_empty_cells
+      binding.pry
       empty_cells.each do |(row_i, col_i)|
         get_cell_non_candidates row_i, col_i
         if cell_solution = unique_candidate
-          @board[row_i][col_i][0] = cell_solution
+          @board[row_i][col_i] = cell_solution
         end
       end
     end
@@ -95,7 +93,6 @@ class Sudoku
   end
 end
 
-=begin
 sudoku_board = Sudoku.new("123456789")
 # sudoku_board.convert_board_string
 p sudoku_board.board == [["1","2","3","4","5","6","7","8","9"]]
@@ -107,11 +104,11 @@ unsolved_sudoku_board = Sudoku.new("123456--9")
 # unsolved_sudoku_board.convert_board_string
 p unsolved_sudoku_board.solved? == false
 # p unsolved_sudoku_board.find_empty_cell == [0,6]
-p unsolved_sudoku_board.get_cell_quadrant(0,0) == 1
-p unsolved_sudoku_board.get_cell_quadrant(0,3) == 2
-p unsolved_sudoku_board.get_cell_quadrant(0,8) == 3
-p unsolved_sudoku_board.get_cell_quadrant(0,7) == 3
-p unsolved_sudoku_board.quad_values(3) == ['-','-','9']
+p unsolved_sudoku_board.get_cell_quadrant(0,0) == 0
+p unsolved_sudoku_board.get_cell_quadrant(0,3) == 1
+p unsolved_sudoku_board.get_cell_quadrant(0,8) == 2
+p unsolved_sudoku_board.get_cell_quadrant(0,7) == 2
+p unsolved_sudoku_board.quad_values(2) == ['-','-','9']
 
 board2 = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
 # p board2.board
@@ -121,6 +118,7 @@ board2 = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93-
 
 board3 = Sudoku.new("435269781682571493197834562826195347374682915951743628519326874248957136763418259")
 
+p "line 121"
 p board3.solved? == true
 
 board4 = Sudoku.new("4-5269781682571493197834562826195347374682915951743628519326874248957136763418259")
