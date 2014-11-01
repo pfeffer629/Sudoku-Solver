@@ -72,12 +72,8 @@ class Sudoku
   end
 
   def is_solved?(string)
-    solved = string.match(/-/)
-    if solved == nil
-      return true
-    else
-      return false
-    end
+    #use regex to look for "-", if you don't find any, return true because game is solved!
+    string.match(/-/) == nil ? true : false
   end
 
   # Returns a nicely formatted string representing the current state of the board
