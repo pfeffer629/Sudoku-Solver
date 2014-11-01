@@ -1,4 +1,4 @@
-
+require 'debugger'
 =begin
  # Implement a Ruby Racer - 'running pattern - Generated display - '
 
@@ -62,52 +62,51 @@ class Sudoku
 
   def initialize(board_string)
     # @display_board = board_string.split(//).clone
-    # @extracted_values = []
+    @extracted_values = []
     # @board = []
     @board = create_2d_board(convert_dashes_to_zeroes(board_string))
      # Split the string into separate arrays.
   end
 
+# WORkS
   def convert_dashes_to_zeroes(board_string)
     board_string.gsub(/\D/){0}.split(//)
   end
 
+
+# WORKS
   def create_2d_board(board_vals)
     board_vals.each_slice(9).to_a
   end
 
 
-  def extract_values(number)
-
-    # row = (number / 9) * 9 # sets initial row to 0
-    # column = row % 9 #
-
-    # 9.times do |num|
-    #   value = @board_string[num]
-  end
-
+# WORKS - BUT IFFY
   def extract_row_values(row_num)
     # row = (number / 9) * 9 # sets initial row to 0
     # @extracted_values.select {|num| num != 0}   # Might have to call destructive
-    @board[row_num]
+    @row_number_for_match_row = (@board[row_num])    # ADDED THIS WHICH MIGHT BREAK CODE
+    match_row(@row_number_for_match_row)  # Row to match      # ADDED THIS WHICH MIGHT BREAK CODE
   end
 
+# WORKS
   def extract_column_values(col_num)
      # p @board
      @board.map {|col| col[col_num]}
   end
 
+# WORKS
   def extract_box_values # (box_num)
      @box_slice_values = []
      p @board_string.each_slice(3) {|slice| @box_slice_values << slice }
   end
 
-  def comparison?
-    alpha_numeric_index = (1..9).to_a
-    collated_values = @extracted_values + alpha_numeric_index   # Class variables - Might have to change later
-    collated_values.uniq!
-  end
+  # def comparison?
+  #   alpha_numeric_index = (1..9).to_a
+  #   collated_values = @extracted_values + alpha_numeric_index   # Class variables - Might have to change later
+  #   collated_values.uniq!
+  # end
 
+# DOES NOT WORK?
   def solve
     81.times do |number|
       next if @board_string[number].to_i != 0
@@ -116,22 +115,42 @@ class Sudoku
     end
   end
 
-  def match_row
+# DOES NOT WORK YET
+  def match_row(cell, row)
+    alpha_numeric_index = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    p alpha_row_number = @board[row] + alpha_numeric_index      # CHANGED THIS LINE
+    p alpha_row_number.uniq!
+     p @unique_value = alpha_row_number.pop
+
+     # index[solution_number]
+     # add arrays then call unique then grab the one that's not zero (insert this in replace of 0)
+     # insert_value_to_cell()
+     p "This is the unique value: #{@unique_value}"
+     insert_value_to_cell
+  end
+
+  def insert_value_to_cell
+    # p @row_index.to_i
+    # p @cell_index.to_i
+    p @board[@row_index.to_i][@cell_index.to_i] = @unique_value
+    p @board
 
   end
 
+#WORKS
   def find_next_empty_cell #If this works, we then need to write a method to find the unique value and ultimtely insert that value into out board
      @board.each_with_index do |row, row_i| # Accessing the rows
           row.each_with_index do |cell, cell_i|
             if cell == "0"
-            puts row_i
-            extract_row_values(row_i)
-            puts cell_i
-            extract_column_values(cell_i)
+            # extract_row_values(row_i)
+              @cell_index = cell_i
+              @row_index = row_i
           end
         end
       end
+      match_row(@cell_index, @row_index)
   end
+
 
 # Pull row out
 # Find the empty cell spot
@@ -141,6 +160,7 @@ class Sudoku
 
   # end
 
+# WORKS
   def board
     @board
   end
