@@ -5,7 +5,15 @@ class Sudoku
     @column_array = []
     @cluster_stage = []
     @cluster_array = []
+    @taken_numbers = []
+    @possibles = %w(1 2 3 4 5 6 7 8 9)
   end
+
+
+  def split_into_cells
+     @cells = @board_string.split('').each_slice(1).to_a
+  end
+
   def create_rows #array of 9 arrays of 9 strings
     # @array_of_strings_rows = @board_string.scan(/.{1,9}/m)
     @rows = @board_string.split('').each_slice(9).to_a
@@ -70,17 +78,41 @@ class Sudoku
     @cluster_array << @cluster_stage[21..23].reduce(:+)
     @cluster_array << @cluster_stage[24..26].reduce(:+)
 
-  # p @cluster_stage
+    @cluster_array
 
+    end
 
+  def find_empty_cells()
 
-   p @cluster_array
-
+    @cell
+    check_rows()
+    check_columns()
+    check_cluster()
 
   end
 
-  def split_into_cells #
-     @board_string.split('').each_slice(1).to_a
+  def check_rows(row_index)
+    @rows[row_index].each do |cell|
+      @taken_numbers << cell if cell != '-'
+    end
+    @taken_numbers
+  end
+
+  def check_columns(column_index)
+    @column_array[column_index].each do |cell|
+      @taken_numbers << cell if cell != '-'
+    end
+    @taken_numbers
+  end
+  def check_cluster(cluster_index)
+    @cluster_array[cluster_index].each do |cell|
+      @taken_numbers << cell if cell != '-'
+    end
+    @taken_numbers
+  end
+
+  def check_possibles
+    @nontaken_numbers = @possibles - @taken_numbers
   end
 
   def solve
@@ -97,21 +129,35 @@ end
 
 board1 = Sudoku.new('---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---')
 
-puts "Test create_rows"
-p board1.create_rows
+ # puts "Test create_rows"
+ board1.create_rows
 
 # puts "Test create_columns"
 
-# p board1.create_column
+board1.create_columns
 
-# # board1.create_columns
+# board1.create_columns
 # puts "Test split_into_cells"
 # p board1.split_into_cells
 
 #access the first row
-# p board1.create_rows[0]
+# p board1.create_rows
 
 # # access the first three indeces of the first row
-# # p board1.create_rows[0](0..2) # => '---'
-puts "CLUSTERS OF THREE CELLS"
- board1.create_clusters
+# # # p board1.create_rows[0](0..2) # => '---'
+# puts "CLUSTERS OF THREE CELLS"
+board1.create_clusters
+
+
+puts "Testing Check Rows"
+p board1.check_rows
+
+puts "Testing Check Columns"
+p board1.check_columns
+
+
+puts "Testing Check Cluster"
+p board1.check_cluster.uniq
+
+puts "Testing non taken numbers"
+p board1.check_possibles
