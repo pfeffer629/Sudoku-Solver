@@ -26,7 +26,21 @@ class Sudoku
     end
   end
 
-  def board
+  def board(string)
+    display = string.split('')#@board_string #break everything into an array of chars.
+    line_inserter = -1 # start at end. We go backwards so that inserting chars doesn't
+                       # complicate accessing index further down string as string length increases
+    while line_inserter >= -display.length #don't go past -80 aka the beginning of the board.
+      display.insert(line_inserter,"\n") #insert a newline character
+      line_inserter-=10 #keep doing this
+    end
+
+    #   this is our top border
+    # p "___ "*(display.length/3) #top of board
+    display.join
+    # p "___ "*(display.length/3) #bottom of board
+
+
   end
 
   def get_row(index) #pass index from @board_string
@@ -172,6 +186,8 @@ p game2.get_cluster(60) == ["8", "7", "4", "1", "3", "6", "2", "5", "9"]
 p game2.get_cluster(45) == ["8", "2", "6", "3", "7", "4", "9", "5", "1"]
 p game2.get_cluster(57) == game2.get_cluster(77) # two indeces in the same cluster should be equal.
 
+
+puts game2.board("123456789123456789123456789")
 ###################################
 
 
