@@ -30,8 +30,15 @@ create placeholder array
 
   2.Horizontal_selector method
 
-
-
+TO DO LIST:
+make a quadrant method separates the board into nine quadrant
+nine arrays inside an array
+2. use column and row index to determine what quadrant to use to interate over for final group to
+add to the compile
+3. add the missing values to the board array.
+5. make sure this works for multiple missing values
+        1.loop back around and also create solved? method
+        2. remove the solved cells coodinates from the all empty array.
 
 
 
