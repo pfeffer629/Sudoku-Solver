@@ -187,7 +187,7 @@ p game2.get_cluster(45) == ["8", "2", "6", "3", "7", "4", "9", "5", "1"]
 p game2.get_cluster(57) == game2.get_cluster(77) # two indeces in the same cluster should be equal.
 
 
-puts game2.board("123456789123456789123456789")
+puts game2.board("123456789123456789123456789749347294249724927492712345492472947123456789123456789")
 ###################################
 
 
