@@ -4,7 +4,6 @@ class Sudoku
   end
 
   def solve
-  # SU DO CODE:
 
   # 1. cell = find_next_empty(cell)
   # 2. possible_numbers = find_possibilities(cell)
@@ -45,27 +44,23 @@ class Sudoku
     constructed_column #return the whole column
   end
   def get_cluster(index)
+    found_cluster = []
     constructed_cluster = [] # create an empty array to hold the chars that will populate our cluster
     all_clusters = (0..80).to_a.group_by{|each_index| (each_index/27)*3 + (each_index%9)/3} #this is a magic, beautiful hash with 9 keys
                                                                                             #each containing an array of the indeces
                                                                                             #(0-80) for each quadrant.
                                                                                             # Upper Left (0) is: [0,1,2,9,10,11,18,19,20]
-    all_clusters.each_key do |cluster|
-      if all_clusters[cluster].include?(index)
-        save_this_cluster = all_clusters[cluster]
-      else
-        puts "error, index not found"
+    all_clusters.each_key do |cluster| #go through all the 9 clusters
+      if all_clusters[cluster].include?(index) #find the cluster that has the index of the cell we're on
+        found_cluster = all_clusters[cluster] #save that cluster in a new variable because you don't like refactoring right now. You just don't.
       end
-
-      save_this_cluster.each do |index|
-        constructed_cluster << @board_string[index]
-      end
-      constructed_cluster
     end
-
-
-
+    found_cluster.each do |index| #in your cluster, iterate through each index
+      constructed_cluster << @board_string[index] #plug each index into your board_string to get the elements
+    end
+    constructed_cluster #return that cluster!
   end
+
   def find_next_empty_cell(index)
     board_string_copy = @board_string.split("") #protect our original data
     index+=1 #skip to the next index right off the bat.
@@ -78,7 +73,8 @@ class Sudoku
   def collect_numbers(index)
     my_row = get_row(index) #get an array of characters on the row. There will be "-"s included
     my_column = get_column(index) ##get an array of characters on the column. There will be "-"s included
-    results = (my_row + my_column).select { |cell| cell != '-'  } #add everything together and eliminate "-"
+    my_cluster = get_cluster(index) # get array of chars for the cluster.
+    results = (my_row + my_column + my_cluster).select { |cell| cell != '-'  } #add everything together and eliminate "-"
     results.uniq! #de-duplicate the results and return.
   end
 
@@ -152,6 +148,10 @@ p game.is_unique?(["neil"]) == true #return true of an array has only one (uniqu
 p game.is_unique?(["neil","molly"]) == false #return false if an array has more than one element.
 p game.is_solved?("123456789") == true
 p game.is_solved?(test_board2) == false
+
+p game2.get_cluster(0) == ["4", "-", "5", "6", "8", "2", "1", "9", "7"]
+p game2.get_cluster(60) == ["8", "7", "4", "1", "3", "6", "2", "5", "9"]
+p game2.get_cluster(45) == ["8", "2", "6", "3", "7", "4", "9", "5", "1"]
 
 
 
