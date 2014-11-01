@@ -3,6 +3,7 @@ class Sudoku
     @board_string = board_string
     @board = []
     convert_board_string
+    @last_empty_cell = [-1, -1]
   end
 
   def convert_board_string
@@ -17,7 +18,9 @@ class Sudoku
   def find_empty_cell
     board.each_index do |row_i|
       board[row_i].each_index do |col_i|
-        return [row_i, col_i] if board[row_i][col_i] == '-'
+        if board[row_i][col_i] == '-'
+
+        end
       end
     end
   end
@@ -40,15 +43,35 @@ class Sudoku
     values
   end
 
-  def get_cell_quadrant *cell_coords
-    (cell_coords.last / 3 + 1 ) * (cell_coords.first / 3 + 1)
+  def get_cell_quadrant row_i, col_i
+    (col_i / 3 + 1 ) * (row_i / 3 + 1)
   end
 
-  def get_cell_candidates
+  def get_cell_non_candidates row_i, col_i
+    @related_cell_values = nil
+    @related_cell_values = row_values(row_i) +
+                           col_values(col_i)
+                           # quad_values(get_cell_quadrant(row_i,col_i))
+    @related_cell_values.delete('-')
+    @related_cell_values
+  end
 
+  def unique_candidate
+    if (unique_vals = @related_cell_values.uniq).size == 8
+      (["1","2","3","4","5","6","7","8","9"] - unique_vals).first
+    end
   end
 
   def solve
+    until solved?
+      # require 'pry'; binding.pry
+      row_i, col_i = find_empty_cell
+      get_cell_non_candidates row_i, col_i
+      if unique_candidate
+        cell_solution = unique_candidate
+        @board[row_i][col_i] = cell_solution
+      end
+    end
   end
 
   def board
@@ -57,67 +80,11 @@ class Sudoku
 
   # Returns a nicely formatted string representing the current state of the board
   def to_s
+    board
   end
 end
 
-=begin
-DESCRIBE THE NOUNS AND VERBS
 
-  INPUT: string of 81 chars (numbers and dashes)
-  OUTPUT: string of 81 chars (all numbers)
-
-  INSTANCE VARS:
-    - @board
-    - @related_cell_values = []
-    -
-
-  CONVERT INPUT DATA INTO STRUCTURE
-    method: convert_board_string
-
-
-  if solved?
-    return solved board
-  else
-    1 - Find first empty
-      method: find_empty_cell
-        - loop through rows
-            - loop through columns
-              - if empty?
-                  return cell coords
-                  and go to #2
-
-    2- Check related cells
-      1 - collect all values from cell's row
-        - method: row_values
-        - input: row #
-        - output: array of values
-          - select row based on row coord of cell
-          - and append array of values to @related_cell_values
-      2 - collect all values from cell's column
-        - method: column_values
-        - input: column #
-        - output: array of values
-          - select column based on column coord of cell
-          - and append array of values to @related_cell_values
-      3 - collect all values from cell's sub quadrant
-        - method: quadrant_values
-        - input: quadrant #
-        - output: array of values
-          - select quadrant based on box of cell
-          - and append array of values to @related_cell_values
-
-    3 - Collate and Prune related values
-      - method: get_related_values
-        - input: cell coords
-        - output: array of values
-          call row_values + column_values + quadrant_values
-      - method: unique_related_values
-        - return @related_cell_values unique
-
-    4 - Check unique
-    5 - Enter value if unique or go to #1
-
-=end
 sudoku_board = Sudoku.new("123456789")
 # sudoku_board.convert_board_string
 p sudoku_board.board == [["1","2","3","4","5","6","7","8","9"]]
@@ -135,4 +102,39 @@ p unsolved_sudoku_board.get_cell_quadrant(0,8) == 3
 p unsolved_sudoku_board.get_cell_quadrant(0,7) == 3
 p unsolved_sudoku_board.quad_values(3) == ['-','-','9']
 
+board2 = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
+# p board2.board
+# p board2.get_cell_non_candidates(0,7)
+# p board2.unique_candidate
+# p board2.find_empty_cell
+
+board3 = Sudoku.new("435269781682571493197834562826195347374682915951743628519326874248957136763418259")
+
+p board3.solved? == true
+
+board4 = Sudoku.new("4-5269781682571493197834562826195347374682915951743628519326874248957136763418259")
+
+board4.solve
+p board4.solved?
+p board4.board
+
+board5 = Sudoku.new("4-52-9781682571493197834562826195347374682915951743628519326874248957136763418259")
+
+board5.solve
+p board5.solved?
+p board5.board
+
+=begin
+
+[["-", "-", "-", "2", "6", "-", "7", "-", "1"],
+ ["6", "8", "-", "-", "7", "-", "-", "9", "-"],
+ ["1", "9", "-", "-", "-", "4", "5", "-", "-"],
+ ["8", "2", "-", "1", "-", "-", "-", "4", "-"],
+ ["-", "-", "4", "6", "-", "2", "9", "-", "-"],
+ ["-", "5", "-", "-", "-", "3", "-", "2", "8"],
+ ["-", "-", "9", "3", "-", "-", "-", "7", "4"],
+ ["-", "4", "-", "-", "5", "-", "-", "3", "6"],
+ ["7", "-", "3", "-", "1", "8", "-", "-", "-"]]
+
+=end
 
