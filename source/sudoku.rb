@@ -4,6 +4,8 @@ class Sudoku
   end
 
   def solve
+  # SU DO CODE:
+
   # 1. cell = find_next_empty(cell)
   # 2. possible_numbers = find_possibilities(cell)
   #     a. collect_numbers(cell)
@@ -68,27 +70,42 @@ class Sudoku
   def is_unique?(array)
     array.length == 1 ? true : false
   end
+
+  def is_solved?(string)
+    solved = string.match(/-/)
+    if solved == nil
+      return true
+    else
+      return false
+    end
+  end
+
   # Returns a nicely formatted string representing the current state of the board
   def to_s
   end
 end
 
-
-=begin
-test_board = "----65781
-              6825-4931
-              978345628
-              261953473
-              746829159
-              517436285
-              193268742
-              489571367
-              634182594"
-=end
 test_board = "----657816825-4931978345628261953473746829159517436285193268742489571367634182594"
-
 test_board2 = "4-5269781682571493197834562826195347374682915951743628519326874248957136763418259"
+game = Sudoku.new(test_board)
+game2 = Sudoku.new(test_board2)
+
+
 =begin
+TESTBOARD1
+----65781
+6825-4931
+978345628
+261953473
+746829159
+517436285
+193268742
+489571367
+634182594
+=end
+
+=begin
+TESTBOARD2
 4-5269781
 682571493
 197834562
@@ -98,29 +115,26 @@ test_board2 = "4-526978168257149319783456282619534737468291595174362851932687424
 519326874
 248957136
 763418259
-
 =end
 
-
-game = Sudoku.new(test_board)
+#DRIVER TEST CODE
 p game.get_row(6) == game.get_row(8) #calling get_row with index on same row should get same result.
 p game.get_row(13) == game.get_row(10)
 p game.get_column(0) == game.get_column(54) #calling get_column with an index on the same column, you should get the same column!
 p game.get_column(50) == game.get_column(77)
-p game.find_next_empty_cell(0) == 1 #=> 1
-p game.find_next_empty_cell(1) == 2 # => 2
-p game.find_next_empty_cell(2) == 3 # => 3
-p game.find_next_empty_cell(3) == 13 # => 13
-p game.collect_numbers(0) == ["6", "5", "7", "8", "1", "9", "2", "4"]
-p game.collect_numbers(13) == ["6", "8", "2", "5", "4", "9", "3", "1", "7"]
-
-game2 = Sudoku.new(test_board2)
-p game2.collect_numbers(1) == ["4", "5", "2", "6", "9", "7", "8", "1"]
-p game2.find_possibilities(1) == ["3"]
-p game2.find_possibilities(3) == []
-p game.is_unique?(["neil"]) == true
-p game.is_unique?(["neil","molly"]) == false
-
+p game.find_next_empty_cell(0) == 1 #given a whatever cell we're on, should return next character in @board_string that is '-'
+p game.find_next_empty_cell(1) == 2
+p game.find_next_empty_cell(2) == 3
+p game.find_next_empty_cell(3) == 13
+p game.collect_numbers(0) == ["6", "5", "7", "8", "1", "9", "2", "4"]          #given a cell, collect all the numbers in the
+p game.collect_numbers(13) == ["6", "8", "2", "5", "4", "9", "3", "1", "7"]    #rows, columns, clusters then return an array of
+p game2.collect_numbers(1) == ["4", "5", "2", "6", "9", "7", "8", "1"]         #those with just the unique values (no duplicates)
+p game2.find_possibilities(1) == ["3"] #given an empty cell, return all the possible values that it could be
+p game2.find_possibilities(3) == [] #a completed cell should return no possibilities!
+p game.is_unique?(["neil"]) == true #return true of an array has only one (unique) element.
+p game.is_unique?(["neil","molly"]) == false #return false if an array has more than one element.
+p game.is_solved?("123456789") == true
+p game.is_solved?(test_board2) == false
 
 
 
