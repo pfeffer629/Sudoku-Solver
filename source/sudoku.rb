@@ -15,11 +15,14 @@ class Sudoku
   end
 
   def solve
-    index = 0
+    cell = 0
     until is_solved?
-
-
-      find_next_empty_cell(index)
+      cell = find_next_empty_cell(cell) #return the index of the next empty cell
+      answers = find_possibilities(cell) # return all possible answers
+      if is_unique?(answers) #we only have one answer!
+        #do stuff
+        # @board_string[cell] = answers[0]
+      end
     end
   end
 
@@ -88,9 +91,14 @@ class Sudoku
   end
 
   def find_possibilities(index)
-    possible = %w(1 2 3 4 5 6 7 8 9)
-    used = collect_numbers(index)
-    possible - used
+    possible = %w(1 2 3 4 5 6 7 8 9) # make an array of all possible sudoku answers
+    used = collect_numbers(index) # send the index of the cell we're working on over
+                                  # to collect_numbers, it returns an array of all the
+                                  # numbers that are ALREADY on the board in the
+                                  # (row + column + cluster) associated with the cell.
+
+    possible - used # remove all the numbers already on the board from the list of possibilities
+                    # thus, you're left with what is possible for this cell. Return it!
   end
 
   def is_unique?(array)
@@ -140,6 +148,7 @@ TESTBOARD2
 =end
 
 #DRIVER TEST CODE
+#################################
 p game.get_row(6) == game.get_row(8) #calling get_row with index on same row should get same result.
 p game.get_row(13) == game.get_row(10)
 p game.get_column(0) == game.get_column(54) #calling get_column with an index on the same column, you should get the same column!
@@ -161,8 +170,9 @@ p game.is_solved?(test_board2) == false
 p game2.get_cluster(0) == ["4", "-", "5", "6", "8", "2", "1", "9", "7"]
 p game2.get_cluster(60) == ["8", "7", "4", "1", "3", "6", "2", "5", "9"]
 p game2.get_cluster(45) == ["8", "2", "6", "3", "7", "4", "9", "5", "1"]
+p game2.get_cluster(57) == game2.get_cluster(77) # two indeces in the same cluster should be equal.
 
-
+###################################
 
 
 
