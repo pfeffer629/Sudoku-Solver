@@ -50,6 +50,7 @@ class Sudoku
     # @current_empty_cell_coords = [0,0]
   end
 
+  # Takes board_string and slices it every nine chars and splits into an array
   def create_board(board_string)
     counter = 0
     while counter <9
@@ -58,6 +59,8 @@ class Sudoku
     end
   end
 
+  # Iterates over board by row and then by element searching for "-"
+  # When it locates "-" it pushes those coords to @all_empty_cell_coords array
   def find_empty_cell_coords
     @board.each_with_index do |row, row_index|
       row.each_with_index do |element_value, column_index|
@@ -71,6 +74,8 @@ class Sudoku
     compile_all_values(@all_empty_cell_coords)
   end
 
+  # Higher level class that runs row,col and quadrant methods
+  # Eventually pushes all found values into one larger array where a missing digit will be located
   def compile_all_values(current_empty_cell)
 
     current_row_vals(current_empty_cell[0][:row_index])
@@ -79,6 +84,8 @@ class Sudoku
     current_unique_vals
     # current_row_vals(current_empty_cell[row_index])
   end
+
+  # Based on a row_index, pushes all values that are not "-" from row to our @compiled_values_array
   def current_row_vals(row_index)
     current_row_vals_array = []
     current_row_vals_array.push(@board[row_index]).flatten!
@@ -86,9 +93,9 @@ class Sudoku
       element_value != "-"
     end
     @compiled_values_array << result_values
-
   end
 
+  # Based on a col_index, pushes all values that are not "-" from column to our @compiled_values_array
   def current_col_vals(column_index)
     transposed_board = @board.transpose
     current_col_vals_array = []
@@ -103,6 +110,7 @@ class Sudoku
     p first_row_first_quadrant = @board[row_index][0..2]
   end
 
+  # Finds unique values from @compiled_values_array and finds the missing number
   def current_unique_vals
     sudoku_range = (1..9).to_a
     current_vals = @compiled_values_array.flatten.uniq.map {|element_value| element_value.to_i }
