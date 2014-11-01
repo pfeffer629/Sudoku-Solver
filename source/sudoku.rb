@@ -1,18 +1,26 @@
+
+=begin
+UNTIL we have no more '-' in @board_string:
+  1. find_next_empty(cell)
+  2. possible_numbers = find_possibilities(cell)
+      a. collect_numbers(cell)
+  3. is_unique?(possible_numbers)
+      a. IF YES, add possible_number to board
+      b. IF NO, go to 1.
+=end
+
 class Sudoku
   def initialize(board_string)
     @board_string = board_string
   end
 
   def solve
-
-  # 1. cell = find_next_empty(cell)
-  # 2. possible_numbers = find_possibilities(cell)
-  #     a. collect_numbers(cell)
-  # 3. is_unique?(possible_numbers)
-  #     a. IF YES, add possible_number to board
-  #     b. IF NO, go to 1.
+    index = 0
+    until is_solved?
 
 
+      find_next_empty_cell(index)
+    end
   end
 
   def board
@@ -62,6 +70,7 @@ class Sudoku
   end
 
   def find_next_empty_cell(index)
+    return index if @board_string[index] == "-" #guard clause for if we're already on empty cell
     board_string_copy = @board_string.split("") #protect our original data
     index+=1 #skip to the next index right off the bat.
     until board_string_copy[index] == '-' do #keep skipping to the next index until we find a '-'
@@ -135,10 +144,10 @@ p game.get_row(6) == game.get_row(8) #calling get_row with index on same row sho
 p game.get_row(13) == game.get_row(10)
 p game.get_column(0) == game.get_column(54) #calling get_column with an index on the same column, you should get the same column!
 p game.get_column(50) == game.get_column(77)
-p game.find_next_empty_cell(0) == 1 #given a whatever cell we're on, should return next character in @board_string that is '-'
-p game.find_next_empty_cell(1) == 2
-p game.find_next_empty_cell(2) == 3
-p game.find_next_empty_cell(3) == 13
+p game.find_next_empty_cell(0) == 0 #given a whatever cell we're on, should return next character in @board_string that is '-'
+p game.find_next_empty_cell(1) == 1
+p game.find_next_empty_cell(2) == 2
+p game.find_next_empty_cell(6) == 13
 p game.collect_numbers(0) == ["6", "5", "7", "8", "1", "9", "2", "4"]          #given a cell, collect all the numbers in the
 p game.collect_numbers(13) == ["6", "8", "2", "5", "4", "9", "3", "1", "7"]    #rows, columns, clusters then return an array of
 p game2.collect_numbers(1) == ["4", "5", "2", "6", "9", "7", "8", "1"]         #those with just the unique values (no duplicates)
@@ -152,6 +161,8 @@ p game.is_solved?(test_board2) == false
 p game2.get_cluster(0) == ["4", "-", "5", "6", "8", "2", "1", "9", "7"]
 p game2.get_cluster(60) == ["8", "7", "4", "1", "3", "6", "2", "5", "9"]
 p game2.get_cluster(45) == ["8", "2", "6", "3", "7", "4", "9", "5", "1"]
+
+
 
 
 
