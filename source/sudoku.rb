@@ -44,7 +44,28 @@ class Sudoku
     end
     constructed_column #return the whole column
   end
+  def get_cluster(index)
+    constructed_cluster = [] # create an empty array to hold the chars that will populate our cluster
+    all_clusters = (0..80).to_a.group_by{|each_index| (each_index/27)*3 + (each_index%9)/3} #this is a magic, beautiful hash with 9 keys
+                                                                                            #each containing an array of the indeces
+                                                                                            #(0-80) for each quadrant.
+                                                                                            # Upper Left (0) is: [0,1,2,9,10,11,18,19,20]
+    all_clusters.each_key do |cluster|
+      if all_clusters[cluster].include?(index)
+        save_this_cluster = all_clusters[cluster]
+      else
+        puts "error, index not found"
+      end
 
+      save_this_cluster.each do |index|
+        constructed_cluster << @board_string[index]
+      end
+      constructed_cluster
+    end
+
+
+
+  end
   def find_next_empty_cell(index)
     board_string_copy = @board_string.split("") #protect our original data
     index+=1 #skip to the next index right off the bat.
