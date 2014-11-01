@@ -116,17 +116,30 @@ class Sudoku
     end
   end
 
+  def match_row
+
+  end
+
   def find_next_empty_cell #If this works, we then need to write a method to find the unique value and ultimtely insert that value into out board
-     @board.each do |row| # Accessing the rows
-        row.each do |cell|
-          if cell == "0"
-            puts "YAAAAAY!!!"
+     @board.each_with_index do |row, row_i| # Accessing the rows
+          row.each_with_index do |cell, cell_i|
+            if cell == "0"
+            puts row_i
+            extract_row_values(row_i)
+            puts cell_i
+            extract_column_values(cell_i)
           end
         end
       end
   end
 
+# Pull row out
+# Find the empty cell spot
+# Solve for that cell
 
+  # def
+
+  # end
 
   def board
     @board
