@@ -24,11 +24,10 @@ class Sudoku
     @empty_cells = []
     board.each_index do |row_i|
       board[row_i].each_index do |col_i|
-        if board[row_i][col_i] == '-'
-          @empty_cells << [row_i, col_i]
-        end
+        @empty_cells << [row_i, col_i] if board[row_i][col_i] == '-'
       end
     end
+    @empty_cells
   end
 
   def row_values row
@@ -50,9 +49,8 @@ class Sudoku
   end
 
   def get_cell_quadrant row_i, col_i
-    i = ((row_i + 1) * 8) + (col_i +1 )
+    i = (row_i * 9) + col_i
     (i / 27) * 3 + (i % 9) / 3
-    # (col_i / 3 + 1 ) * (row_i / 3 + 1)
   end
 
   def get_cell_non_candidates row_i, col_i
@@ -66,16 +64,16 @@ class Sudoku
 
   def unique_candidate
     if (unique_vals = @related_cell_values.uniq).size == 8
-      (["1","2","3","4","5","6","7","8","9"] - unique_vals).first
+      ( ('1'..'9').to_a - unique_vals).first
     end
   end
 
   def solve
     until solved?
       find_all_empty_cells
-      binding.pry
+      # binding.pry
       empty_cells.each do |(row_i, col_i)|
-        get_cell_non_candidates row_i, col_i
+        get_cell_non_candidates(row_i, col_i)
         if cell_solution = unique_candidate
           @board[row_i][col_i] = cell_solution
         end
@@ -101,9 +99,7 @@ p sudoku_board.col_values(0) == ["1"]
 p sudoku_board.solved? == true
 
 unsolved_sudoku_board = Sudoku.new("123456--9")
-# unsolved_sudoku_board.convert_board_string
 p unsolved_sudoku_board.solved? == false
-# p unsolved_sudoku_board.find_empty_cell == [0,6]
 p unsolved_sudoku_board.get_cell_quadrant(0,0) == 0
 p unsolved_sudoku_board.get_cell_quadrant(0,3) == 1
 p unsolved_sudoku_board.get_cell_quadrant(0,8) == 2
@@ -111,27 +107,24 @@ p unsolved_sudoku_board.get_cell_quadrant(0,7) == 2
 p unsolved_sudoku_board.quad_values(2) == ['-','-','9']
 
 board2 = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
-# p board2.board
-# p board2.get_cell_non_candidates(0,7)
-# p board2.unique_candidate
-# p board2.find_empty_cell
+
+p board2.get_cell_non_candidates(0,7) == ["2", "6", "7", "1", "9", "4", "2", "7", "3", "7", "1", "9", "5"]
+p board2.unique_candidate == '8'
 
 board3 = Sudoku.new("435269781682571493197834562826195347374682915951743628519326874248957136763418259")
 
 p "line 121"
-p board3.solved? == true
+p board3.solved?
 
 board4 = Sudoku.new("4-5269781682571493197834562826195347374682915951743628519326874248957136763418259")
 
 board4.solve
 p board4.solved?
-p board4.board
 
 board5 = Sudoku.new("4-52-9781682571493197834562826195347374682915951743628519326874248957136763418259")
 
 board5.solve
 p board5.solved?
-p board5.board
 
 =begin
 
@@ -146,7 +139,3 @@ p board5.board
  ["7", "-", "3", "-", "1", "8", "-", "-", "-"]]
 
 =end
-
-board5 = Sudoku.new("4-52-9781682571493197834562826195347374682915951743628519326874248957136763418259")
-
-p board5.board
