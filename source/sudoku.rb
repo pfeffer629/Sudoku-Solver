@@ -1,16 +1,9 @@
 =begin
-cell = individual element of board
-quadrant = 3x3 box of cells
-row = complete row
-column = complete vertical column
-sub-row = three cells of row
-board = large array of nested array rows
-
 initialize board
   1.converting the board string into data structure of arrays
       slice string at every 9th character
       push elements by row into larger board array
-create placeholder array
+  create placeholder array
 
   2. Empty_cell method
   iterate over board array
@@ -24,11 +17,6 @@ create placeholder array
   4. vertical push method
         transposes board
         use empty element index to find column to determine row to iterate over
-  5.
-
-
-
-  2.Horizontal_selector method
 
 TO DO LIST:
 make a quadrant method separates the board into nine quadrant
@@ -39,9 +27,6 @@ add to the compile
 5. make sure this works for multiple missing values
         1.loop back around and also create solved? method
         2. remove the solved cells coodinates from the all empty array.
-
-
-
 =end
 class Sudoku
   attr_reader :all_empty_cell_coords
@@ -63,9 +48,9 @@ class Sudoku
     @quadrant_8 = []
     @quadrant_9 = []
     create_board(board_string)
+    populate_quadrant_array
     find_empty_cell_coords
     cycle_through_empty_cells
-    # @current_empty_cell_coords = [0,0]
   end
 
   # Takes board_string and slices it every nine chars and splits into an array
@@ -73,7 +58,7 @@ class Sudoku
     counter = 0
     while counter < 9
       @board << board_string.slice!(0,9).split(//)
-      counter +=1
+      counter += 1
     end
   end
 
@@ -93,10 +78,16 @@ class Sudoku
     # @all_empty_cell_coords.cycle do |empty_coord_hash|
     #   break out of cycle somehow...
     # end
+    # until @all_empty_cell_coords.size == 0 do
+
+    # end
+    fill_empty_cell(7,6)
     fill_empty_cell(0,1)
+
   end
 
   def fill_empty_cell row_index, column_index
+    @compiled_values_array = []
     compile_all_values(row_index,column_index)
     if @current_unique_vals.size == 1
       p "We have a match!"
@@ -110,9 +101,8 @@ class Sudoku
     p "compile #{row_index} #{column_index}"
     current_row_vals(row_index)
     current_col_vals(column_index)
-    populate_quadrant_array
     current_quad_vals(row_index,column_index)
-    current_unique_vals
+    find_unique_vals
   end
 
   # Based on a row_index, pushes all values that are not "-" from row to our @compiled_values_array
@@ -203,7 +193,7 @@ class Sudoku
   end
 
   # Finds unique values from @compiled_values_array and finds the missing number
-  def current_unique_vals
+  def find_unique_vals
     sudoku_range = (1..9).to_a
     current_vals = @compiled_values_array.flatten.uniq.map {|element_value| element_value.to_i }
     p @current_unique_vals.replace(sudoku_range - current_vals)
@@ -223,18 +213,8 @@ class Sudoku
   end
 end
 
-game = Sudoku.new("4-5269781682571493197834562826195347374682915951743628519326874248957136763418259")
-game.to_s
-# p game.quadrant_1
-# game = Sudoku.new("4-526-781682571493197834562826195347374682915951743628519326874248957136763418259")
-# p game.all_empty_cell_coords
+# game = Sudoku.new("4-5269781682571493197834562826195347374682915951743628519326874248957136763418259")
+# game.to_s
 
-# does board create work?
-# does all empty cells work?
-# loop through?
-# does current_row_vals work?
-# cols?
-# boxes?
-
-# p game.current_empty_cell_coords == [0,1]
-# p game.current_row_vals
+game2 = Sudoku.new("4-5269781682571493197834562826195347374682915951743628519326874248957-36763418259")
+game2.to_s
