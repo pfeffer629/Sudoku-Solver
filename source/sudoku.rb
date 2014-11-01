@@ -1,57 +1,67 @@
+require 'pry'
+require 'pry-byebug'
+
 class Sudoku
+
+  attr_reader :empty_cells
+
   def initialize(board_string)
     @board_string = board_string
     @board = []
     convert_board_string
-    @last_empty_cell = [-1, -1]
   end
 
   def convert_board_string
-    @board_string.split('').each_slice(9) {|row| @board << row }
+    chars_with_quad = @board_string.chars.map.with_index do |char, i|
+      [char, (((i / 27) * 3 + (i % 9) / 3))]
+    end
+    chars_with_quad.each_slice(9) {|row| @board << row }
   end
 
   def solved?
-    board.each { |row| row.each { |cell| return false if cell == "-" } }
+    board.each { |row| row.each { |cell| return false if cell.first == "-" } }
     true
   end
 
-  def find_empty_cell
+  def find_all_empty_cells
+    @empty_cells = []
     board.each_index do |row_i|
       board[row_i].each_index do |col_i|
-        if board[row_i][col_i] == '-'
-
+        if board[row_i][col_i].first == '-'
+          @empty_cells << [row_i, col_i]
         end
       end
     end
   end
 
   def row_values row
-    board[row]
+    board[row].map(&:first)
   end
 
   def col_values col
-    board.map { |row| row[col] }
+    board.map { |row| row[col].first }
   end
 
   def quad_values quadrant
     values = []
     board.each_index do |row_i|
       board[row_i].each_index do |col_i|
-        values <<  board[row_i][col_i] if get_cell_quadrant(row_i, col_i) == quadrant
+        values <<  board[row_i][col_i].first if board[row_i][col_i].last == quadrant
       end
     end
     values
   end
 
   def get_cell_quadrant row_i, col_i
-    (col_i / 3 + 1 ) * (row_i / 3 + 1)
+    board[row_i, col_i].last
+    # (col_i / 3 + 1 ) * (row_i / 3 + 1)
   end
 
   def get_cell_non_candidates row_i, col_i
     @related_cell_values = nil
     @related_cell_values = row_values(row_i) +
                            col_values(col_i)
-                           # quad_values(get_cell_quadrant(row_i,col_i))
+                           quad_values(get_cell_quadrant(row_i,col_i))
     @related_cell_values.delete('-')
     @related_cell_values
   end
@@ -64,12 +74,13 @@ class Sudoku
 
   def solve
     until solved?
-      # require 'pry'; binding.pry
-      row_i, col_i = find_empty_cell
-      get_cell_non_candidates row_i, col_i
-      if unique_candidate
-        cell_solution = unique_candidate
-        @board[row_i][col_i] = cell_solution
+      binding.pry
+      find_all_empty_cells
+      empty_cells.each do |(row_i, col_i)|
+        get_cell_non_candidates row_i, col_i
+        if cell_solution = unique_candidate
+          @board[row_i][col_i][0] = cell_solution
+        end
       end
     end
   end
@@ -84,7 +95,7 @@ class Sudoku
   end
 end
 
-
+=begin
 sudoku_board = Sudoku.new("123456789")
 # sudoku_board.convert_board_string
 p sudoku_board.board == [["1","2","3","4","5","6","7","8","9"]]
@@ -95,7 +106,7 @@ p sudoku_board.solved? == true
 unsolved_sudoku_board = Sudoku.new("123456--9")
 # unsolved_sudoku_board.convert_board_string
 p unsolved_sudoku_board.solved? == false
-p unsolved_sudoku_board.find_empty_cell == [0,6]
+# p unsolved_sudoku_board.find_empty_cell == [0,6]
 p unsolved_sudoku_board.get_cell_quadrant(0,0) == 1
 p unsolved_sudoku_board.get_cell_quadrant(0,3) == 2
 p unsolved_sudoku_board.get_cell_quadrant(0,8) == 3
@@ -138,3 +149,6 @@ p board5.board
 
 =end
 
+board5 = Sudoku.new("4-52-9781682571493197834562826195347374682915951743628519326874248957136763418259")
+
+p board5.board

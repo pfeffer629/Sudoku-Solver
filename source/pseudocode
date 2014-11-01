@@ -1,0 +1,58 @@
+=begin
+DESCRIBE THE NOUNS AND VERBS
+
+  INPUT: string of 81 chars (numbers and dashes)
+  OUTPUT: string of 81 chars (all numbers)
+
+  INSTANCE VARS:
+    - @board
+    - @related_cell_values = []
+    -
+
+  CONVERT INPUT DATA INTO STRUCTURE
+    method: convert_board_string
+
+
+  if solved?
+    return solved board
+  else
+    1 - Find first empty
+      method: find_empty_cell
+        - loop through rows
+            - loop through columns
+              - if empty?
+                  return cell coords
+                  and go to #2
+
+    2- Check related cells
+      1 - collect all values from cell's row
+        - method: row_values
+        - input: row #
+        - output: array of values
+          - select row based on row coord of cell
+          - and append array of values to @related_cell_values
+      2 - collect all values from cell's column
+        - method: column_values
+        - input: column #
+        - output: array of values
+          - select column based on column coord of cell
+          - and append array of values to @related_cell_values
+      3 - collect all values from cell's sub quadrant
+        - method: quadrant_values
+        - input: quadrant #
+        - output: array of values
+          - select quadrant based on box of cell
+          - and append array of values to @related_cell_values
+
+    3 - Collate and Prune related values
+      - method: get_related_values
+        - input: cell coords
+        - output: array of values
+          call row_values + column_values + quadrant_values
+      - method: unique_related_values
+        - return @related_cell_values unique
+
+    4 - Check unique
+    5 - Enter value if unique or go to #1
+
+=end
