@@ -66,7 +66,7 @@ class Sudoku
     @board.each_with_index do |row, row_index|
       row.each_with_index do |element_value, column_index|
         if element_value == "-"
-          p @all_empty_cell_coords.push({row_index: row_index, column_index: column_index})
+          @all_empty_cell_coords.push({row_index: row_index, column_index: column_index})
         end
       end
     end
@@ -77,6 +77,7 @@ class Sudoku
     until @all_empty_cell_coords.size == 0 do
       @all_empty_cell_coords.cycle do |empty_coords_hash|
         fill_empty_cell(empty_coords_hash[:row_index],empty_coords_hash[:column_index])
+        find_empty_cell_coords
       end
     end
   end
@@ -99,6 +100,7 @@ class Sudoku
   def compile_all_values row_index, column_index
     current_row_vals(row_index)
     current_col_vals(column_index)
+    populate_quadrant_array
     current_quad_vals(row_index,column_index)
     find_unique_vals
   end
@@ -125,6 +127,15 @@ class Sudoku
   end
 
   def populate_quadrant_array
+    @quadrant_1 = []
+    @quadrant_2 = []
+    @quadrant_3 = []
+    @quadrant_4 = []
+    @quadrant_5 = []
+    @quadrant_6 = []
+    @quadrant_7 = []
+    @quadrant_8 = []
+    @quadrant_9 = []
     @board.each_with_index do |row, row_index|
       row.each_with_index do |element_value, column_index|
         if row_index.between?(0,2) && column_index.between?(0,2)
@@ -214,22 +225,17 @@ end
 # game = Sudoku.new("4-5269781682571493197834562826195347374682915951743628519326874248957136763418259")
 # game.to_s
 
-test2 = Sudoku.new("4-526978168257149-197834562826195347374682915951743628519326874248957-36763418259")
-test2.to_s
-test2.solve
-test2.to_s
+# test2 = Sudoku.new("4-52-978168257149-19-834562826195347374682915951743628519326874248957-36763418259")
+# test2.to_s
+# test2.solve
+# test2.to_s
 
-test3 = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
-test3.to_s
-test3.solve
-test3.to_s
+# test3 = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
+# test3.to_s
+# test3.solve
+# test3.to_s
 
-test3 = Sudoku.new("--5-3--819-285--6-6----4-5---74-283-34976---5--83--49-15--87--2-9----6---26-495-3")
-test3.to_s
-test3.solve
-test3.to_s
-
-test3 = Sudoku.new("29-5----77-----4----4738-129-2--3-648---5--7-5---672--3-9--4--5----8-7---87--51-9")
-test3.to_s
-test3.solve
-test3.to_s
+# test3 = Sudoku.new("--5-3--819-285--6-6----4-5---74-283-34976---5--83--49-15--87--2-9----6---26-495-3")
+# test3.to_s
+# test3.solve
+# test3.to_s
