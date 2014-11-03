@@ -49,8 +49,7 @@ class Sudoku
   end
 
   def get_cell_quadrant row_i, col_i
-    i = (row_i * 9) + col_i
-    (i / 27) * 3 + (i % 9) / 3
+    (row_i - row_i%3) + col_i / 3
   end
 
   def get_cell_non_candidates row_i, col_i
@@ -87,7 +86,11 @@ class Sudoku
 
   # Returns a nicely formatted string representing the current state of the board
   def to_s
-    board
+    board.each do |row|
+        puts ("- " * 2 ) * row.size + "-"
+        puts "| " + row.join(" | ") + " |"
+    end
+    puts ("- " * 2 ) * board.first.size + "-"
   end
 end
 
@@ -107,6 +110,7 @@ p unsolved_sudoku_board.get_cell_quadrant(0,7) == 2
 p unsolved_sudoku_board.quad_values(2) == ['-','-','9']
 
 board2 = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
+p board2.get_cell_quadrant(5,6)
 
 p board2.get_cell_non_candidates(0,7) == ["2", "6", "7", "1", "9", "4", "2", "7", "3", "7", "1", "9", "5"]
 p board2.unique_candidate == '8'
@@ -120,11 +124,14 @@ board4 = Sudoku.new("4-526978168257149319783456282619534737468291595174362851932
 
 board4.solve
 p board4.solved?
+puts board4
 
 board5 = Sudoku.new("4-52-9781682571493197834562826195347374682915951743628519326874248957136763418259")
 
 board5.solve
 p board5.solved?
+
+puts board5
 
 =begin
 
