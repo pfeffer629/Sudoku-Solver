@@ -29,6 +29,8 @@ create placeholder array
 
 
   2.Horizontal_selector method
+    The next thing to do is make the horizontal selector
+
 
 TO DO LIST:
 make a quadrant method separates the board into nine quadrant
