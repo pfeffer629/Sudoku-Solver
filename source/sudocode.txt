@@ -1,0 +1,28 @@
+Input: string of integers and dashes (81 chars)
+Output: string of integers (81 chars)
+
+1. Create board (#print_board)
+  - Split every nine chars into a row
+
+2. Find next empty cell (i.e a dash)
+  - #next_empty_cell
+
+  3. Look at related sets to empty cell
+    - Row (#get_row)
+    - Column (#get_column)
+    - Box (#get_box)
+
+  4. Find cell possibilities
+    - Find existing integers (#existing_nums)
+      a. For each char, if it's not a dash, add it to an array
+    - Find numbers not used yet (#nums_not_used)
+      a. take a default array of 1-9 and delete existing nums from it
+    - These methods are applied to #get_row .. column .. box
+
+  5. Check if there is a unique solution for the cell
+    - Check next number in #nums_not_used
+      a. if the number doesn't conflict, move to next cell
+      b. if there is a conflict go back and use next number from #nums_not_used
+
+  6. Continue at step 2 with next cell
+
