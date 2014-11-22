@@ -1,6 +1,9 @@
 class Sudoku
-  attr_reader :puzzle, :solver, :rows, :columns, :blocks
-  # create instance variables for board, solver, rows, columns, blocks
+  # create instance variables for puzzle, solver, rows, columns, blocks
+  # Puzzle is the initial board.
+  # Solver is a working model of all possible answers for each cell in the puzzle
+  # Rows, columns, blocks are arrays of 9 arrays of the known solutions for each row/column/block
+
   def initialize(board_string)
     @puzzle = self.board(board_string)
     @solver = self.generate_solver_array(@puzzle)
@@ -10,12 +13,15 @@ class Sudoku
   end
 
 
-  # Solved?
+  # Solved? returns true if there are only 81 digits remaining in solver.  If the puzzle has not been solved and there are
+  # multiple numbers as possibilities in any cell, the length of the solver will be > 81
   def solved?
     return true if @solver.flatten.join("").length == 81
     return false if @solver.flatten.join("").length > 81
     return "Error ERROR ERROOOOORRRRR"
   end
+
+  # Initializes a printable version of the board
 
   def board(board_string)
     ary = board_string.split('')
@@ -31,7 +37,7 @@ class Sudoku
      nested_ary.each{|row| puts row.to_s + "\n"}
   end
 
-  #solver array holds "notes", possible answers in each cell instead of dashes
+  # solver array holds "notes", possible answers in each cell instead of dashes
   # solver array = hidden array copy of board with possible answers instead of dash
   def generate_solver_array(board)
     array = board.flatten.map { |cell| cell.gsub(/-/, "123456789") }
@@ -52,7 +58,7 @@ class Sudoku
     rows.each{|row| row.delete("-")}
   end
 
-  #columns = rows.transpose
+  #columns = arrays representing the known solutions in each row
   def generate_columns(board_string)
     ary = board_string.split('')
     cols = []
@@ -62,7 +68,7 @@ class Sudoku
     columns = cols.transpose.each{|column| column.delete("-")}
   end
 
-
+  # Blocks = arrays representing the known solutions in each block of 9 cells
   def generate_blocks(board_string)
     blocks = [[],[],[],[],[],[],[],[],[]]
     ary =  board_string.split(//)
@@ -88,18 +94,26 @@ class Sudoku
     return blocks
   end
 
+  # Solves the puzzle by iterating over it, checking rows, columns, blocks.  After each sweep of the board, it updates 
+  # the definitions of rows/columns/blocks and sweeps again until it has reached a solution or 
+  # its maximum number of attempts.  
   def solve
   	i = 0
-    until self.solved? == true || i > 5000
+    until self.solved? == true || i > 500
       self.check_row
       self.check_column
       self.check_block
       self.update_row_column_block
       i += 1
     end
-     self.to_s(@solver) 
-     p @solver.flatten.join("")
+    p "Unable to solve" if i >500
+    self.to_s(@solver) 
+    # p @solver.flatten.join("")
   end
+
+ # Checks every cell in solver to deterimine if the length of the cell (each cell is a string) is greater than 1.
+ # If so, then the cell has not yet been solved.  
+ # Deletes all known solutions for that row from each cell. 
 
   def check_row
     i = 0
@@ -118,16 +132,8 @@ class Sudoku
     end
     @solver = @solver.transpose
   end
-
-  def update_row_column_block
-    updates = Marshal.load(Marshal.dump(@solver))
-    updates.each{|row| row.each{|cell| cell.gsub!(/\d{2,}/, "-")}}
-    updates = updates.flatten.join("")
-    @rows = self.generate_rows(updates)
-    @columns = self.generate_columns(updates)
-    @blocks = self.generate_blocks(updates)
-  end
-
+  # Check block is similar to check row/column.  The logic is a bit more complicated, 
+  # so the code here is a bit repetitive
   def check_block
     for i in 0..81
       if i / 9 < 3 && i % 9 < 3
@@ -151,8 +157,19 @@ class Sudoku
       end
     end
   end
-end
+  # Updates the definitions for rows, columns, blocks.  With each successive iteration, the 
+  # number of elements in @rows, @columns, and @blocks should increase.  When the updated 
+  # rows, columns, and blocks are passed into the solve function, @solver decreases in size.
+  def update_row_column_block
+    updates = Marshal.load(Marshal.dump(@solver))
+    updates.each{|row| row.each{|cell| cell.gsub!(/\d{2,}/, "-")}}
+    updates = updates.flatten.join("")
+    @rows = self.generate_rows(updates)
+    @columns = self.generate_columns(updates)
+    @blocks = self.generate_blocks(updates)
+  end
 
+end
 
 my_board = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
 
@@ -173,35 +190,35 @@ puzzle14 = Sudoku.new("----------2-65-------18--4--9----6-4-3---57--------------
 #puzzle15 = Sudoku.new("---------------------------------------------------------------------------------")
 
 
-
-# puzzle1.solve
-# p puzzle1.solved?
-# puzzle2.solve
-# p puzzle2.solved?
-# puzzle3.solve
-# p puzzle3.solved? 
-# puzzle4.solve
-# p puzzle4.solved? 
-# puzzle5.solve
-# p puzzle5.solved? 
+#The solution works for these puzzles.  The complex sudoku, which requires 
+puzzle1.solve
+p puzzle1.solved?
+puzzle2.solve
+p puzzle2.solved?
+puzzle3.solve
+p puzzle3.solved? 
+puzzle4.solve
+p puzzle4.solved? 
+puzzle5.solve
+p puzzle5.solved? 
 puzzle6.solve
 p puzzle6.solved? 
-puzzle7.solve
-p puzzle7.solved? 
-puzzle8.solve
-p puzzle8.solved? 
-puzzle9.solve
-p puzzle9.solved? 
-puzzle10.solve
-p puzzle10.solved? 
-puzzle11.solve
-p puzzle11.solved? 
-puzzle12.solve
-p puzzle12.solved? 
-puzzle13.solve
-p puzzle13.solved? 
-puzzle14.solve
-p puzzle14.solved? 
+# puzzle7.solve
+# p puzzle7.solved? 
+# puzzle8.solve
+# p puzzle8.solved? 
+# puzzle9.solve
+# p puzzle9.solved? 
+# puzzle10.solve
+# p puzzle10.solved? 
+# puzzle11.solve
+# p puzzle11.solved? 
+# puzzle12.solve
+# p puzzle12.solved? 
+# puzzle13.solve
+# p puzzle13.solved? 
+# puzzle14.solve
+# p puzzle14.solved? 
 # puzzle15.solve
 # p puzzle15.solved? 
 
