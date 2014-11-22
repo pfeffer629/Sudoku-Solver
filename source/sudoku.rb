@@ -16,12 +16,7 @@ class Sudoku
           end
         end
       end
-    # sleep(1)
-    # p @board
     end
-    # unsolved_board = ""
-    # solved_square = (1..9)
-    # unsolved_square = ""
     @board
   end
 
@@ -61,33 +56,34 @@ class Sudoku
   end
 
   def find_cell_solution(coordinates)
-    row_possiblities = check_row(coordinates)
-    column_possiblities = check_column(coordinates)
-    box_possiblities = check_box(coordinates)
+    row_possibilities = check_row(coordinates)
+    column_possibilities = check_column(coordinates)
+    box_possibilities = check_box(coordinates)
 
-    solution = row_possiblities & column_possiblities & box_possiblities
+    solution = row_possibilities & column_possibilities & box_possibilities
 
     return solution[0] if solution.length == 1
     "-" # default "no solution found" type thing
   end
 
-  def check_row(coordinates, local_board = @board)
-    possibilities = ("1".."9").to_a
+
+  def check_row(coordinates)
     row = @board[coordinates[0]]
-    row.each do |cell|
-      if !empty?(cell)
-        if possibilities.include?(cell)
-          possibilities.delete(cell)
-        end
-      end
-    end
-    possibilities
+    find_possibilities_in_row(row)
   end
 
   def check_column(coordinates)
+    row = @board.transpose[coordinates[1]]
+    find_possibilities_in_row(row)
+  end
+
+  def check_box(coordinates)
+    box_values = local_box(coordinates)
+    find_possibilities_in_row(box_values)
+  end
+
+  def find_possibilities_in_row(row)
     possibilities = ("1".."9").to_a
-    local_board = @board.transpose
-    row = local_board[coordinates[1]]
     row.each do |cell|
       if !empty?(cell)
         if possibilities.include?(cell)
@@ -96,22 +92,6 @@ class Sudoku
       end
     end
     possibilities
-    # new_coordinates = [coordinates[1], coordinates[0]]
-    # check_row(new_coordinates, @board.transpose)
-  end
-
-  def check_box(coordinates)
-    possibilities = ("1".."9").to_a
-    box_values = local_box(coordinates)
-    box_values.each do |cell|
-      if !empty?(cell)
-        if possibilities.include?(cell)
-          possibilities.delete(cell)
-        end
-      end
-    end
-    possibilities
-    # TODO: "check string" should maybe be it's own method
   end
 
   def local_box(coordinates)
