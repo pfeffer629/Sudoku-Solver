@@ -7,35 +7,50 @@ class Sudoku
     @nodes = []
     @all_possible_values = ("1".."9").to_a
     create_nodes
+    assign_relationships
   end
 
-    def create_nodes
-    @board_string.split("").each_with_index { |value, index|
-      @nodes << Node.new(value, index)
-    }
+  def create_nodes
+    @board_string.split("").each_with_index { |value, index| @nodes << Node.new(value, index) }
+  end
+
+  def add_value(node)
+    node.value = (@all_possible_values - node.all_values).sample
   end
 
   def solve
-    assign_relationships
     @nodes.each do |node|
-      if node.value == "-"
-        difference = @all_possible_values - node.all_values
-        if difference.length == 1
-          node.value = difference.join("")
+      # If no rules are broken
+      if node.box_values.uniq.length == node.box_values.length && node.col_values.uniq.length == node.col_values.length && node.row_values.uniq.length == node.row_values.length
+        # If the board isn't solved AND the node's value is empty
+        if @nodes.any? { |node| node.value == "-" } && node.value == "-"
+          add_value(node)
+          solve
+        # If the board is solved!
+        elsif @nodes.all? { |node| node.value != "-" }
+          @nodes.each_with_index do |node, index|
+            if index % 9 == 0
+              # puts "\n\n"
+              print "#{node.value}"
+            else
+              print "#{node.value}"
+            end
+          end
+          return "Sudoku solved!!!"
         end
+      #If any of the rules are broken
+      else
+        reset_values
+        solve
       end
     end
-
-      if @nodes.any? { |node| node.value == "-" }
-        solve
-      else
-        return "Sudoku solved!!!"
-      end
   end
 
-  def advanced_solve
+  def reset_values
     @nodes.each do |node|
-      if node.box_value.uniq.length == node.box_values.length && node.col_values.uniq.length == node.col_values.length && node.col_values.uniq.length == node.col_values.length
+      node.value = "-" unless node.original
+    end
+  end
 
   def board
   end
@@ -137,27 +152,28 @@ class Node
   end
 
   def row_values
-    @row_mates.map { |object| object.value }
+    values = @row_mates.map { |object| object.value }
+    values.reject { |value| value == "-" }
   end
 
   def col_values
-    @col_mates.map { |object| object.value }
+    values = @col_mates.map { |object| object.value }
+    values.reject { |value| value == "-" }
   end
 
   def box_values
-    @box_mates.map { |object| object.value }
+    values = @box_mates.map { |object| object.value }
+    values.reject { |value| value == "-" }
   end
 
   def all_values
-    (box_values + row_values + col_values).reject { |value| value == "-" }
+    box_values + row_values + col_values
   end
 end
 
-sudoku = Sudoku.new("---6891--8------2915------84-3----5-2----5----9-24-8-1-847--91-5------6--6-41----")
+time = Time.now
+sudoku = Sudoku.new("---------------------------------------------------------------------------------")
+
 
 puts sudoku.solve
-
-
-# sudoku.nodes[18].box_mates.each do |box_mate|
-#   puts box_mate.original_index
-# end
+puts Time.now - time
