@@ -119,16 +119,25 @@ class Sudoku
     @box_possibilities_array
   end
 
-  def merge_column_and_row_and_box_possibilities
+  def merge_column_and_row_and_box_possibilities_for_each_cell
     # check_each_row
     # check_each_column
     # check_each_box
     @merged_possibilities = []
-    @row_possibilities_array.each_with_index do |row, index|
-      @merged_possibilities << (row & @column_possibilities_array[index] & @box_possibilities_array[index])
+    @board_array.each do |row|
+      row.each_with_index do |cell, index|
+        if cell == "-"
+          @merged_possibilities << (row & @column_possibilities_array[index] & @box_possibilities_array[index])
+        end
+      end
     end
     @merged_possibilities
   end
+
+
+
+
+  def merge_possibilities_for_one_cell()
 
 end
 
@@ -151,10 +160,7 @@ p game.check_each_box
 puts ""
 puts "test merge all possibilities"
 puts ""
-p game.merge_column_and_row_and_box_possibilities
-
-
-
+p game.merge_column_and_row_and_box_possibilities_for_each_cell
 
 
 
