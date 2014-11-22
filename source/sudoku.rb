@@ -54,14 +54,22 @@ class Sudoku
 #checks for duplicates in row/column/box
   def valid_board?(board)
     9.times do |index|
-      return false unless valid_column?(column(index, board))
-      return false unless valid_row?(row(index, board))
-      return false unless valid_box?(box(index, board))
+      return false unless valid_group?(column(index, board))
+      return false unless valid_group?(row(index, board))
+      return false unless valid_group?(box(index, board))
     end
     true
   end
 
 #do these work?
+  def valid_group(array)
+	array.each do |cell|
+	  next if cell == '-'
+      return false if !(@test_array.one?{|sudoku_element| sudoku_element == cell} || @test_array.none?{|sudoku_element| sudoku_element == cell})
+    end
+    true
+  end
+
   def valid_row?(row)
     row.each do |cell|
       return false if !@test_array.one?{|sudoku_element| sudoku_element == cell}
