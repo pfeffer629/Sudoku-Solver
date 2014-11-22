@@ -13,8 +13,38 @@ require_relative 'sudoku'
 # so we call String#chomp to remove them.
 
 
-board_string = File.readlines('sudoku_puzzles.txt').first.chomp
+# board_string = File.readlines('sudoku_puzzles.txt').first.chomp
 
+# game = Sudoku.new(board_string)
+
+board_string = '123456789234567891345-78912456789123567891234678912345789123456891234567912345678'
 game = Sudoku.new(board_string)
-game.solve
+
+# p game.board == '-234567-9234567891345678912456789123567891234678912345789123456891234567912345678'
+
+
+# game.find_blank == [0, 0]
+# #  puts game
+# p game.check_row #== %w(2 3 4 5 6 7 9)
+# p game.check_col
+# # puts game
+# p game.number_check == "1"
+# p game.insert_number
 puts game
+
+
+p game.find_blank
+
+p game.check_box
+
+
+
+game.solve
+
+
+
+
+
+# puts game
+# # game.solve
+# # puts game
