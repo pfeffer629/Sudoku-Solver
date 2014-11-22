@@ -15,6 +15,17 @@ require_relative 'sudoku'
 
 board_string = File.readlines('sudoku_puzzles.txt').first.chomp
 
+p "testing the Board class"
+board = Board.new(board_string)
+board.create_board
+p board.board_array.first == ["-", "-", "-", "2", "6", "-", "7", "-", "1"]
+p board.print_board
+
+p "testing the Sudoku class"
 game = Sudoku.new(board_string)
-game.solve
-puts game
+# game.solve
+# game.find_empty_cell
+# puts game
+
+#test code
+#board.create_board[0] == board.
