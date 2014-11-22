@@ -5,11 +5,17 @@ class Sudoku
   end
 
   def solve
-    while !solved?
+    has_found_empty_cell = true
+    while has_found_empty_cell
+      has_found_empty_cell = false
+      
       @board.map!.with_index do |row, outer_counter|
-        row.map!.with_index do |cell, inner_counter|
-          coordinates = [outer_counter, inner_counter]
+        
+        row.map.with_index do |cell, inner_counter|
+          coordinates = [outer_counter, inner_counter] # Equivalent to (y, x)
+          
           if empty?(cell)
+            has_found_empty_cell = true  
             find_cell_solution(coordinates)
           else
             cell
@@ -20,27 +26,19 @@ class Sudoku
     @board
   end
 
-  def solved?
-    @board.each do |row|
-      row.each do |cell|
-        return false if empty?(cell)
-      end
-    end
-    true
-  end
-
   def board
     @board_string
   end
 
-  # Returns a nicely formatted string representing the current state of the board
+  # Not gonna lie, I kind of ran out of steam here.
   def to_s
-    # p board
+    @board.to_s
   end
 
   private
 
   def board_string_to_board(board_string)
+    # I have no doubt that there is a much better way to do this.
     formatted_board = []
     9.times do |counter|
       starting_position = counter * 9
@@ -56,14 +54,13 @@ class Sudoku
   end
 
   def find_cell_solution(coordinates)
-    row_possibilities = check_row(coordinates)
-    column_possibilities = check_column(coordinates)
-    box_possibilities = check_box(coordinates)
+    solution = check_row(coordinates) & check_column(coordinates) & check_box(coordinates)
 
-    solution = row_possibilities & column_possibilities & box_possibilities
-
-    return solution[0] if solution.length == 1
-    "-" # default "no solution found" type thing
+    if solution.length == 1
+      solution[0]
+    else
+      "-" # only gets returned if no unique solution is found
+    end
   end
 
 
@@ -83,38 +80,30 @@ class Sudoku
   end
 
   def find_possibilities_in_row(row)
-    possibilities = ("1".."9").to_a
-    row.each do |cell|
-      if !empty?(cell)
-        if possibilities.include?(cell)
-          possibilities.delete(cell)
-        end
-      end
-    end
-    possibilities
+    ("1".."9").to_a - row 
   end
 
+  # returns 1D array containing local box values based on coordinates
+  # which handily matches the format required by the find_possibilities_in_row method
   def local_box(coordinates)
-    # 1D array containing local box values based on coordinates
-    return_array = []
     if ((0..2).include?(coordinates[0]) && (0..2).include?(coordinates[1])) # top left
-      return build_box(0, 0)
+      build_box(0, 0)
     elsif ((0..2).include?(coordinates[0]) && (3..5).include?(coordinates[1])) # top middle
-      return build_box(0,3)
+      build_box(0,3)
     elsif ((0..2).include?(coordinates[0]) && (6..8).include?(coordinates[1])) # top right
-      return build_box(0,6)
+      build_box(0,6)
     elsif ((3..5).include?(coordinates[0]) && (0..2).include?(coordinates[1])) # middle left
-      return build_box(3,0)
+      build_box(3,0)
     elsif ((3..5).include?(coordinates[0]) && (3..5).include?(coordinates[1])) # middle
-      return build_box(3,3)
+      build_box(3,3)
     elsif ((3..5).include?(coordinates[0]) && (6..8).include?(coordinates[1])) # middle right
-      return build_box(3,6)
+      build_box(3,6)
     elsif ((6..8).include?(coordinates[0]) && (0..2).include?(coordinates[1])) # bottom left
-      return build_box(6,0)
+      build_box(6,0)
     elsif ((6..8).include?(coordinates[0]) && (3..5).include?(coordinates[1])) # bottom middle
-      return build_box(6,3)
+      build_box(6,3)
     elsif ((6..8).include?(coordinates[0]) && (6..8).include?(coordinates[1])) # bottom right
-      return build_box(6,6)
+      build_box(6,6)
     end
   end
 
@@ -134,11 +123,10 @@ class Sudoku
 
 end
 
+# Admire our exhaustive test suite:
 
 board = Sudoku.new('---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---'
 )
 p board.board
-p board.solve
-
-
-
+board.solve
+puts board
