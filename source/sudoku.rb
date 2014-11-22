@@ -19,10 +19,9 @@ class Sudoku
 
   #The following methods are to be used by #solve
 
-  # #find_next_empty_cell returns the location of the first empty cell as an array
-  def find_next_empty_cell
-    row_index = 0
-    column_index = 0
+  # #find_all_empty_cells returns the location of the first empty cell as an array
+
+  def find_all_empty_cells
     @board_array.each_index { |i|
       row = @board_array[i]
       row_index = i
@@ -68,7 +67,6 @@ class Sudoku
     box_chars
   end
 
-
   def find_nums_not_used(char_array)
     existing_nums = []
     char_array.each { |char|
@@ -79,11 +77,11 @@ class Sudoku
     nums_not_used = []
 
     default_array.each {|num| nums_not_used << num if existing_nums.include?(num) == false}
-    nums_not_used
 
+    nums_not_used
   end
 
-  def find_possible_solutions(empty_cell_position_array)
+  def find_unique_num(empty_cell_position_array)
     row = get_row(empty_cell_position_array)
     row_possibles = find_nums_not_used(row)
 
@@ -91,47 +89,25 @@ class Sudoku
     column_possibles = find_nums_not_used(column)
 
     box = get_box(empty_cell_position_array)
-    box_possibles= find_nums_not_used(box)
+    box_possibles = find_nums_not_used(box)
 
-    cell_possibles = row_possibles + column_possibles + box_possibles
-    cell_possibles.uniq.sort
+    row_possibles & column_possibles & box_possibles
   end
 
-  def solve(next_empty_cell=find_next_empty_cell)
-    possible_solutions = find_possible_solutions(next_empty_cell)
-    row = get_row(next_empty_cell)
-    column = get_column(next_empty_cell)
-    box = get_box(next_empty_cell)
-    # p row
-    # p column
-    # p box
-    # cell = @board_array[next_empty_cell[0]][next_empty_cell[1]]
-
-    possible_solutions.each do |num|
-
-      #start testing
-      p next_empty_cell
-      p num
-      p row.include?(num)
-      p column.include?(num)
-      p box.include?(num)
-      #end testing
-
-      unless row.include?(num) || column.include?(num) || box.include?(num)
-        @board_array[next_empty_cell[0]][next_empty_cell[1]] = num
+  def solve
+    @board_array.each_index do |row_index|
+      row = @board_array[row_index]
+      row.each_index do |column_index|
+        char = row[column_index]
+        num_to_add = find_unique_num([row_index,column_index])
+          if char == "-" && num_to_add != nil && num_to_add.length == 1
+            @board_array[row_index][column_index] = num_to_add.first
+            solve
+          end
       end
-
-      if @board_array[next_empty_cell[0]][next_empty_cell[1]] != "-"
-        p next_empty_cell
-        p to_s
-        solve
-      end
-    end
-
-  end
-
-
-end
+    end #end first do
+  end #end solve method
+end #end class
 
 
 
