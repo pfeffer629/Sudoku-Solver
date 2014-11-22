@@ -134,30 +134,53 @@ class Sudoku
   end
 
   def check_block
-    #TO DO: CHECK BLOCKS
+    # current_solution = Marshal.load(Marshal.dump(@solver))
+    # current_solution.flatten!
+    # index = 0
+    # case index
+    # when index == 0 || index == 1 || index == 2 || index == 9 || index == 10 || index == 11 || index == 18 || index == 19 || index == 20
+    for i in 0..81
+      if i / 9 < 3 && i % 9 < 3
+        @solver.flatten[i].delete!(@blocks[0].join("")) if @solver.flatten[i].length > 1
+      elsif i / 9 < 3 && i % 9 < 6
+        @solver.flatten[i].delete!(@blocks[1].join("")) if @solver.flatten[i].length > 1
+      elsif i / 9 < 3 && i % 9 > 5
+        @solver.flatten[i].delete!(@blocks[2].join("")) if @solver.flatten[i].length > 1
+      elsif i / 9 < 6 && i % 9 < 3
+        @solver.flatten[i].delete!(@blocks[3].join("")) if @solver.flatten[i].length > 1
+      elsif i / 9 < 6 && i % 9 < 6
+        @solver.flatten[i].delete!(@blocks[4].join("")) if @solver.flatten[i].length > 1
+      elsif i / 9 < 6 && i % 9 > 5
+        @solver.flatten[i].delete!(@blocks[5].join("")) if @solver.flatten[i].length > 1
+      elsif i/ 9 > 5 && i % 9 < 3
+        @solver.flatten[i].delete!(@blocks[6].join("")) if @solver.flatten[i].length > 1
+      end
+    #   #when index == 3 || index == 4 || index == 5 || index
+    #   end
+    # index += 1
+    end
   end
 end
 
-#"abcdef".delete("bf")
 
 my_board = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
 
 my_board.to_s
 p ""
-my_board.check_column
-my_board.check_row
-my_board.update_row_column_block
-my_board.to_s(my_board.solver)
+# my_board.check_column
+# my_board.check_row
+# my_board.update_row_column_block
+# my_board.to_s(my_board.solver)
 
-p ""
-my_board.check_column
-my_board.check_row
-my_board.update_row_column_block
+# p ""
+# my_board.check_column
+# my_board.check_row
+# my_board.update_row_column_block
+# my_board.to_s(my_board.solver)
+# p ""
+# my_board.check_column
+# my_board.check_row
+# my_board.update_row_column_block
+# # my_board.to_s(my_board.solver)
+my_board.check_block
 my_board.to_s(my_board.solver)
-p ""
-my_board.check_column
-my_board.check_row
-my_board.update_row_column_block
-my_board.to_s(my_board.solver)
-
-
