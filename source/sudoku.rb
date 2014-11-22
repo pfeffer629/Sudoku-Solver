@@ -24,6 +24,7 @@ with the solution. Then move on to the next cell with a "-" for each cell
 class Sudoku
   def initialize(board_string)
     @board = board_string
+    @board_array = @board.split("")
   end
 
   def generate_row
@@ -124,17 +125,35 @@ class Sudoku
       end
     end
 
+    full_number = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
     generate_row
     generate_col
     generate_box
+
+    dash_index.each do |e|
+      possibilities = full_number - (@row_hash[dash_index[e]] + @col_hash[dash_index[e]] + @box_hash[dash_index[e]]).uniq
+      if possibilities.length == 1
+        # reproduce string with possibilities
+        @board_array = @board_array.each_with_index { |item, index| (index == e) ? possibilities : "-"}
+        p @board_array
+        break
+      elsif possibilities.length > 1
+        #skip to next element
+        p "lala"
+      end
+    end
+
+
+
 
     row = @row_hash[dash_index[0]]
     col = @col_hash[dash_index[0]]
     box = @box_hash[dash_index[0]]
 
-    p result = [row,col,box].flatten.uniq
-    full_number = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    p possiblities = full_number - result
+    result = [row,col,box].flatten.uniq
+
+    possibilities = full_number - result
 
 
   end
