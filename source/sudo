@@ -43,7 +43,7 @@ class Sudoku
       Array.new(9) { board_row[row] }
     end
 
-    @row_hash = Hash[rows.flatten(1).map.with_index{|set, idx| [idx, set]}]
+    Hash[rows.flatten(1).map.with_index{|set, idx| [idx, set]}]
 
   end
 
@@ -68,22 +68,11 @@ class Sudoku
       Array.new(9) { board_col[col] }
     end
 
-    @col_hash = Hash[cols.flatten(1).map.with_index{|set, idx| [idx, set]}]
+    Hash[cols.flatten(1).map.with_index{|set, idx| [idx, set]}]
 
   end
 
   def generate_box
-
-    row1 = @board[0..8].split("") #array
-    row2 = @board[9..17].split("")
-    row3 = @board[18..26].split("")
-    row4 = @board[27..35].split("")
-    row5 = @board[36..44].split("")
-    row6 = @board[45..53].split("")
-    row7 = @board[54..62].split("")
-    row8 = @board[63..71].split("")
-    row9 = @board[72..80].split("")
-
     box1 = row1[0..2] + row2[0..2] + row3[0..2]
     box2 = row1[3..5] + row2[3..5] + row3[3..5]
     box3 = row1[6..8] + row2[6..8] + row3[6..8]
@@ -94,24 +83,36 @@ class Sudoku
     box8 = row7[3..5] + row8[3..5] + row9[3..5]
     box9 = row7[6..8] + row8[6..8] + row9[6..8]
 
-    board_box = { 1 => box1, #array,
-              2 => box2,
-              3 => box3,
-              4 => box4,
-              5 => box5,
-              6 => box6,
-              7 => box7,
-              8 => box8,
-              9 => box9,
+    board_box = { 1 => @board2[0..8], #array,
+              2 => @board2[9..17],
+              3 => @board2[18..26],
+              4 => @board2[27..35],
+              5 => @board2[36..44],
+              6 => @board2[45..53],
+              7 => @board2[54..62],
+              8 => @board2[63..71],
+              9 => @board2[72..80],
             }
 
-    boxs = (1..9).to_a.map do |box|
-      Array.new(9) { board_box[box] }
+    cols = (1..9).to_a.map do |col|
+      Array.new(9) { board_col[col] }
     end
 
-    @box_hash = Hash[boxs.flatten(1).map.with_index{|set, idx| [idx, set]}]
+    Hash[cols.flatten(1).map.with_index{|set, idx| [idx, set]}]
 
 
+
+  end
+
+  def find_row
+
+  end
+
+  def find_col
+
+  end
+
+  def find_box
 
   end
 
@@ -120,23 +121,9 @@ class Sudoku
     @board3 = @board.split("")
     @board3.each_with_index do |e,i|
       if e == "-"
-       dash_index << i
+        dash_index << i
       end
     end
-
-    generate_row
-    generate_col
-    generate_box
-
-    row = @row_hash[dash_index[0]]
-    col = @col_hash[dash_index[0]]
-    box = @box_hash[dash_index[0]]
-
-    p result = [row,col,box].flatten.uniq
-    full_number = ["-", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    p possiblities = full_number - result
-
-
   end
 
   def board
@@ -148,4 +135,16 @@ class Sudoku
 end
 
 game = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
-game.solve
+p game.generate_row
+p game.generate_col
+
+
+row1 = @board[0..8].split("") #array
+    row2 = @board[9..17].split("")
+    row3 = @board[18..26].split("")
+    row4 = @board[27..35].split("")
+    row5 = @board[36..44].split("")
+    row6 = @board[45..53].split("")
+    row7 = @board[54..62].split("")
+    row8 = @board[63..71].split("")
+    row9 = @board[72..80].split("")
