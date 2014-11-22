@@ -50,7 +50,6 @@ class Sudoku
       rows << ary.shift(9)
     end
     rows.each{|row| row.delete("-")}
-    # rows.each{|row| row.delete_if{|cell| cell.length > 1}}
   end
 
   #columns = rows.transpose
@@ -89,27 +88,23 @@ class Sudoku
     return blocks
   end
 
-  # check each cell against rows, columns, blocks
-  # => delete numbers from cell matching elements of row, column, block arrays
-  # => if cell.length == 1, add to solution, also add to row, column, block
-  # => move to next cell if cell.length > 1
-  def check
-    #until self.solved? == true
-      #for each element in solver
-      # check_row
-      #check_column
-      #check_block
-      #update_row/col/block
-      #end
-      #p solution as a string
-      # p @solver
+  def solve
+  	i = 0
+    until self.solved? == true || i > 5000
+      self.check_row
+      self.check_column
+      self.check_block
+      self.update_row_column_block
+      i += 1
+    end
+     self.to_s(@solver) 
+     p @solver.flatten.join("")
   end
 
   def check_row
     i = 0
     9.times do
       @solver[i].each{|cell| cell.delete!(@rows[i].join("")) if cell.length > 1}
-
       i += 1
     end
   end
@@ -130,34 +125,30 @@ class Sudoku
     updates = updates.flatten.join("")
     @rows = self.generate_rows(updates)
     @columns = self.generate_columns(updates)
-    # UPDATE BLOCKS
+    @blocks = self.generate_blocks(updates)
   end
 
   def check_block
-    # current_solution = Marshal.load(Marshal.dump(@solver))
-    # current_solution.flatten!
-    # index = 0
-    # case index
-    # when index == 0 || index == 1 || index == 2 || index == 9 || index == 10 || index == 11 || index == 18 || index == 19 || index == 20
     for i in 0..81
       if i / 9 < 3 && i % 9 < 3
         @solver.flatten[i].delete!(@blocks[0].join("")) if @solver.flatten[i].length > 1
       elsif i / 9 < 3 && i % 9 < 6
         @solver.flatten[i].delete!(@blocks[1].join("")) if @solver.flatten[i].length > 1
-      elsif i / 9 < 3 && i % 9 > 5
+      elsif i / 9 < 3 
         @solver.flatten[i].delete!(@blocks[2].join("")) if @solver.flatten[i].length > 1
       elsif i / 9 < 6 && i % 9 < 3
         @solver.flatten[i].delete!(@blocks[3].join("")) if @solver.flatten[i].length > 1
       elsif i / 9 < 6 && i % 9 < 6
         @solver.flatten[i].delete!(@blocks[4].join("")) if @solver.flatten[i].length > 1
-      elsif i / 9 < 6 && i % 9 > 5
+      elsif i / 9 < 6 
         @solver.flatten[i].delete!(@blocks[5].join("")) if @solver.flatten[i].length > 1
-      elsif i/ 9 > 5 && i % 9 < 3
+			elsif i / 9 < 9 && i % 9 < 3
         @solver.flatten[i].delete!(@blocks[6].join("")) if @solver.flatten[i].length > 1
+      elsif i / 9 < 9 && i % 9 < 6
+    	  @solver.flatten[i].delete!(@blocks[7].join("")) if @solver.flatten[i].length > 1
+      elsif i / 9 < 9 
+        @solver.flatten[i].delete!(@blocks[8].join("")) if @solver.flatten[i].length > 1
       end
-    #   #when index == 3 || index == 4 || index == 5 || index
-    #   end
-    # index += 1
     end
   end
 end
@@ -165,22 +156,53 @@ end
 
 my_board = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
 
-my_board.to_s
-p ""
-# my_board.check_column
-# my_board.check_row
-# my_board.update_row_column_block
-# my_board.to_s(my_board.solver)
+puzzle1 = Sudoku.new("---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---")
+puzzle2 = Sudoku.new("--5-3--819-285--6-6----4-5---74-283-34976---5--83--49-15--87--2-9----6---26-495-3")
+puzzle3 = Sudoku.new("29-5----77-----4----4738-129-2--3-648---5--7-5---672--3-9--4--5----8-7---87--51-9")
+puzzle4 = Sudoku.new("-8--2-----4-5--32--2-3-9-466---9---4---64-5-1134-5-7--36---4--24-723-6-----7--45-")
+puzzle5 = Sudoku.new("6-873----2-----46-----6482--8---57-19--618--4-31----8-86-2---39-5----1--1--4562--")
+puzzle6 = Sudoku.new("---6891--8------2915------84-3----5-2----5----9-24-8-1-847--91-5------6--6-41----")
+puzzle7 = Sudoku.new("-3-5--8-45-42---1---8--9---79-8-61-3-----54---5------78-----7-2---7-46--61-3--5--")
+puzzle8 = Sudoku.new("-96-4---11---6---45-481-39---795--43-3--8----4-5-23-18-1-63--59-59-7-83---359---7")
+puzzle9 = Sudoku.new("----754----------8-8-19----3----1-6--------34----6817-2-4---6-39------2-53-2-----")
+puzzle10 = Sudoku.new("3---------5-7-3--8----28-7-7------43-----------39-41-54--3--8--1---4----968---2--")
+puzzle11 = Sudoku.new("3-26-9--55--73----------9-----94----------1-9----57-6---85----6--------3-19-82-4-")
+puzzle12 = Sudoku.new("-2-5----48-5--------48-9-2------5-73-9-----6-25-9------3-6-18--------4-71----4-9-")
+puzzle13 = Sudoku.new('--7--8------2---6-65--79----7----3-5-83---67-2-1----8----71--38-2---5------4--2--')
+puzzle14 = Sudoku.new("----------2-65-------18--4--9----6-4-3---57-------------------73------9----------")
+#puzzle15 = Sudoku.new("---------------------------------------------------------------------------------")
 
-# p ""
-# my_board.check_column
-# my_board.check_row
-# my_board.update_row_column_block
-# my_board.to_s(my_board.solver)
-# p ""
-# my_board.check_column
-# my_board.check_row
-# my_board.update_row_column_block
-# # my_board.to_s(my_board.solver)
-my_board.check_block
-my_board.to_s(my_board.solver)
+
+
+# puzzle1.solve
+# p puzzle1.solved?
+# puzzle2.solve
+# p puzzle2.solved?
+# puzzle3.solve
+# p puzzle3.solved? 
+# puzzle4.solve
+# p puzzle4.solved? 
+# puzzle5.solve
+# p puzzle5.solved? 
+puzzle6.solve
+p puzzle6.solved? 
+puzzle7.solve
+p puzzle7.solved? 
+puzzle8.solve
+p puzzle8.solved? 
+puzzle9.solve
+p puzzle9.solved? 
+puzzle10.solve
+p puzzle10.solved? 
+puzzle11.solve
+p puzzle11.solved? 
+puzzle12.solve
+p puzzle12.solved? 
+puzzle13.solve
+p puzzle13.solved? 
+puzzle14.solve
+p puzzle14.solved? 
+# puzzle15.solve
+# p puzzle15.solved? 
+
+
