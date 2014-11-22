@@ -48,5 +48,9 @@ puts
 puts "Testing find_possible_solutions"
 p game.find_possible_solutions(game.find_next_empty_cell) == %w(2 3 4 5 7 8 9)
 
-
-
+puts
+puts "Testing solve"
+# p game2.solve == [0,5]
+game.solve
+p game.to_s
+game.display_board

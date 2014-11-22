@@ -97,8 +97,36 @@ class Sudoku
     cell_possibles.uniq.sort
   end
 
-  def solve(next_empty_cell=nil )
-    next_empty_cell = find_next_empty_cell
+  def solve(next_empty_cell=find_next_empty_cell)
+    possible_solutions = find_possible_solutions(next_empty_cell)
+    row = get_row(next_empty_cell)
+    column = get_column(next_empty_cell)
+    box = get_box(next_empty_cell)
+    # p row
+    # p column
+    # p box
+    # cell = @board_array[next_empty_cell[0]][next_empty_cell[1]]
+
+    possible_solutions.each do |num|
+
+      #start testing
+      p next_empty_cell
+      p num
+      p row.include?(num)
+      p column.include?(num)
+      p box.include?(num)
+      #end testing
+
+      unless row.include?(num) || column.include?(num) || box.include?(num)
+        @board_array[next_empty_cell[0]][next_empty_cell[1]] = num
+      end
+
+      if @board_array[next_empty_cell[0]][next_empty_cell[1]] != "-"
+        p next_empty_cell
+        p to_s
+        solve
+      end
+    end
 
   end
 
