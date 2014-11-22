@@ -51,41 +51,93 @@ class Sudoku
       end
       @column_possibilities_array << @column_possibilities
     end
-    @board_array
     @column_possibilities_array
   end
 
+  def get_boxes
+    box_1 = []
+    box_2 = []
+    box_3 = []
+    box_4 = []
+    box_5 = []
+    box_6 = []
+    box_7 = []
+    box_8 = []
+    box_9 = []
+    @board_array.each_with_index do |row, row_index|
+      row.each_with_index do |cell, cell_index|
+        if cell_index < 3 && row_index < 3
+          box_1 << cell
+        elsif cell_index < 6 && row_index < 3
+          box_2 << cell
+        elsif cell_index < 9 && row_index < 3
+          box_3 << cell
+        elsif cell_index < 3 && row_index < 6
+          box_4 << cell
+        elsif cell_index < 6 && row_index < 6
+          box_5 << cell
+        elsif cell_index < 9 && row_index < 6
+          box_6 << cell
+        elsif cell_index < 3 && row_index < 9
+          box_7 << cell
+        elsif cell_index < 6 && row_index < 9
+          box_8 << cell
+        else cell_index < 9 && row_index < 9
+          box_9 << cell
+        end
+      end
+    end
+    box_1
+    box_2
+    box_3
+    box_4
+    box_5
+    box_6
+    box_7
+    box_8
+    box_9
+   @box_array = []
+    @box_array << box_1 << box_2 << box_3 << box_4 << box_5 << box_6 << box_7 << box_8 << box_9
+  end
+
   def check_each_box
+    get_boxes
     @box_possibilities_array = []
+    @box_array.each do |box|
+      @box_possibilities = %w(1 2 3 4 5 6 7 8 9)
+      box.map do |cell|
+        if cell == "-"
+          box.any? do |cell_value|
+            if @box_possibilities.include?(cell_value)
+              @box_possibilities.delete(cell_value)
+            end
+          end
+        end
+      end
+      @box_possibilities_array << @box_possibilities
+    end
+    @box_possibilities_array
+  end
 
-
-  def merge_column_and_row_possibilities
-    check_each_row
-    check_each_column
+  def merge_column_and_row_and_box_possibilities
+    # check_each_row
+    # check_each_column
+    # check_each_box
     @merged_possibilities = []
     @row_possibilities_array.each_with_index do |row, index|
-      puts counter
-      @merged_possibilities << (row & @column_possibilities_array[index])
-
+      @merged_possibilities << (row & @column_possibilities_array[index] & @box_possibilities_array[index])
     end
     @merged_possibilities
   end
 
-
-
-def get_boxes
-  box1 = []
-  box2 = []
-  box3 = []
-  box4 = []
-  box5 = []
-
 end
+
+
 
 
 game = Sudoku.new
 
-puts "test check_each_row"
+puts "check_each_row"
 puts ""
 p game.check_each_row
 puts ""
@@ -93,8 +145,13 @@ puts "check_each_column"
 puts ""
 p game.check_each_column
 puts ""
-puts "check_merge_column_and_row_possibilities"
-p game.merge_column_and_row_possibilities
+puts "check_each_box"
+puts ""
+p game.check_each_box
+puts ""
+puts "test merge all possibilities"
+puts ""
+p game.merge_column_and_row_and_box_possibilities
 
 
 
