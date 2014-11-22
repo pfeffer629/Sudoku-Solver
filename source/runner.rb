@@ -1,4 +1,5 @@
 require_relative 'sudoku'
+require 'benchmark'
 
 # The sudoku puzzles that your program will solve can be found
 # in the sudoku_puzzles.txt file.
@@ -12,9 +13,13 @@ require_relative 'sudoku'
 # Remember, the file has newline characters at the end of each line,
 # so we call String#chomp to remove them.
 
+sum = 0
+100.times do
+start = Time.now
+Sudoku.new('---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---').solve
+finish = Time.now
+sum += finish - start
+end
 
-board_string = File.readlines('sudoku_puzzles.txt').first.chomp
+p sum/100
 
-game = Sudoku.new(board_string)
-game.solve
-puts game
