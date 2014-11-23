@@ -37,6 +37,7 @@
 # VI. Check if all cells are filled.
 # VII. Repeat
 
+require 'benchmark'
 
 class Sudoku
 
@@ -45,17 +46,6 @@ class Sudoku
     @board_array = []
     @board_string.split("").each_slice(9){|a| @board_array << a}
     @possible_solutions = ["1","2","3","4","5","6","7","8","9"]
-
-    @empty_cell = []
-    @found_row = []
-    @found_column = []
-    @found_box_row_coordinate = []
-    @found_box_column_coordinate = []
-    @box_cells = []
-    @found_filled_cells = []
-    @counter = 0
-    @solution_found = false
-
   end
 
   def print_board
@@ -192,7 +182,6 @@ class Sudoku
   def solve
     while @board_array.flatten.include?("-") || @board_array.flatten.include?("%")
       find_solution
-
     end
     to_s
   end
@@ -206,8 +195,8 @@ class Sudoku
   end
 end
 
-doku = Sudoku.new("6-873----2-----46-----6482--8---57-19--618--4-31----8-86-2---39-5----1--1--4562--")
-# doku = Sudoku.new('---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---')
+# doku = Sudoku.new("6-873----2-----46-----6482--8---57-19--618--4-31----8-86-2---39-5----1--1--4562--")
+doku = Sudoku.new('---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---')
 # doku = Sudoku.new('--------------12345678-----------------------------------------------------------')
 # p doku.find_empty_cell
 # doku.print_board
