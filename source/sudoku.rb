@@ -32,8 +32,6 @@ class Sudoku
 
   def box(box)
     box_values = []
-      y = 0
-      x = 0
     @boxes[box].each do |coords|
       coords
       y = coords[0]
@@ -122,14 +120,12 @@ class Sudoku
         row.each_with_index do |element, x|
           next unless element == "-"
           if possible(y, x).one?
-            p @board[y][x] = possible(y, x)[0]
+            @board[y][x] = possible(y, x)[0]
             changed = true
           end
         end
       end
     end
-    p solved?
-    p @board
   end
 
   def solved?
@@ -141,7 +137,14 @@ class Sudoku
 
 #  Returns a nicely formatted string representing the current state of the board
   def to_s
-    @board.to_s
+    board_string = ""
+    @board.each do |row|
+      row.each do |element|
+        board_string << element
+      end
+      board_string << "\n"
+    end
+    board_string
   end
 end
 
