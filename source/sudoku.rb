@@ -12,9 +12,13 @@ class Sudoku
   end
 
   def solve
-    until find_blank == false
+    until is_incomplete? == false
       find_blank
     end
+  end
+
+  def is_incomplete?
+    return false if not @board_arr.flatten.include?("-")
   end
 
   def find_blank
@@ -22,14 +26,13 @@ class Sudoku
     @board_arr.each_with_index do |row, row_ind|
       row.each_with_index do |value, col_ind|
         if value == "-"
-          p @blank_pos = [row_ind, col_ind]
+          @blank_pos = [row_ind, col_ind]
           @check_arr = []
           check_row
           check_col
           check_box
           number_check
           insert_number
-          puts self
         end
       end
     end
@@ -38,14 +41,14 @@ class Sudoku
   def check_row
     @row_arr = @board_arr[@blank_pos[0]].select {|v| v =~ /[1-9]/}
     @check_arr = @check_arr.concat(@row_arr)
-    p @check_arr = @check_arr.uniq.sort
+    @check_arr = @check_arr.uniq.sort
   end
 
   def check_col
     @trans_board = @board_arr.transpose
     @col_arr = @trans_board[@blank_pos[1]].select {|v| v =~ /[1-9]/}
     @check_arr = @check_arr.concat(@col_arr)
-    p @check_arr = @check_arr.uniq.sort
+    @check_arr = @check_arr.uniq.sort
   end
 
   def check_box
@@ -62,7 +65,7 @@ class Sudoku
     @box_checks
     @box_arr = @box_checks.select {|v| v =~ /[1-9]/}
     @check_arr = @check_arr.concat(@box_arr)
-    p @check_arr = @check_arr.uniq.sort
+    @check_arr = @check_arr.uniq.sort
   end
 
   def number_check
@@ -70,7 +73,7 @@ class Sudoku
       @missing_number = "X"
       9.times do |n|
         if not @check_arr.include?(@poss_arr[n])
-          return @missing_number = n.to_s
+          return @missing_number = @poss_arr[n].to_s
         end
       end
     else

@@ -1,4 +1,5 @@
 require_relative 'sudoku'
+require 'benchmark'
 
 # The sudoku puzzles that your program will solve can be found
 # in the sudoku_puzzles.txt file.
@@ -17,30 +18,12 @@ require_relative 'sudoku'
 
 # game = Sudoku.new(board_string)
 
-board_string = '---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---'
+board_string = '---6891--8------2915------84-3----5-2----5----9-24-8-1-847--91-5------6--6-41----'
 # board_string = '-234567-9234567291345678912456789123567891234678912345789123456891234567912345678'
 
 game = Sudoku.new(board_string)
 
-"- - - 2 6 - 7 - 1"
-"6 8 - - 7 - - 9 -"
-"1 9 - - - 4 5 - -"
-"8 2 - 1 - - - 4 -"
-"- - 4 6 - 2 9 - -"
-"- 5 - - - 3 - 2 8"
-"- - 9 3 - - - 7 4"
-"- 4 - - 5 - - 3 6"
-"7 - 3 - 1 8 - - -"
-
-"- 3 5 2 6 0 7 8 1"
-"6 8 2 5 7 1 - 9 3"
-"1 9 7 8 3 4 5 6 2"
-"8 2 6 1 0 - 3 4 -"
-"3 - 4 6 - 2 9 - -"
-"- 5 - - - 3 - 2 8"
-"- - 9 3 - - - 7 4"
-"- 4 - - 5 - - 3 6"
-"7 - 3 - 1 8 - - -"
+p game.board_arr.flatten
 
 # game.find_blank == [0, 0]
 # #  puts game
@@ -50,10 +33,9 @@ game = Sudoku.new(board_string)
 # p game.number_check == "1"
 # p game.insert_number
 # puts game
-puts game
+# puts game
 
-game.solve
-puts game
+# game.solve
 
 
 # puts game
@@ -61,9 +43,9 @@ puts game
 # puts game
 
 
+game.solve
 
-
-
+puts game
 # game.solve
 
 
