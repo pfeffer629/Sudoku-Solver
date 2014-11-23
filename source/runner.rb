@@ -18,7 +18,7 @@ require 'benchmark'
 
 # game = Sudoku.new(board_string)
 
-board_string = '---6891--8------2915------84-3----5-2----5----9-24-8-1-847--91-5------6--6-41----'
+board_string = '6-873----2-----46-----6482--8---57-19--618--4-31----8-86-2---39-5----1--1--4562--'
 # board_string = '-234567-9234567291345678912456789123567891234678912345789123456891234567912345678'
 
 game = Sudoku.new(board_string)
@@ -49,7 +49,7 @@ puts game
 # game.solve
 
 
-
+puts Benchmark.measure {game.solve}
 
 
 # puts game
