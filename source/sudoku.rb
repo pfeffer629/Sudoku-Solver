@@ -14,7 +14,7 @@ class Sudoku
       [[6,3],[6,4],[6,5],[7,3],[7,4],[7,5],[8,3],[8,4],[8,5]], #box_8
       [[6,6],[6,7],[6,8],[7,6],[7,7],[7,8],[8,6],[8,7],[8,8]] #box_9
     ]
-    p @board.flatten
+    @board.flatten
   end
 
 # find values in row/column/box respectively
@@ -32,9 +32,8 @@ class Sudoku
 
   def box(box)
     box_values = []
-    y = 0
-    x = 0
-    box
+      y = 0
+      x = 0
     @boxes[box].each do |coords|
       coords
       y = coords[0]
@@ -46,8 +45,8 @@ class Sudoku
 
 #finds box given x and y coordinates
   def in_box(y, x)
-    @boxes.each do |box|
-      box.each_with_index do |coords, index|
+    @boxes.each_with_index do |box, index|
+      box.each do |coords|
         return index if coords == [y, x]
       end
     end
