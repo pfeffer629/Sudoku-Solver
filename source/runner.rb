@@ -49,7 +49,7 @@ puts game
 # game.solve
 
 
-puts Benchmark.measure {game.solve}
+puts Benchmark.measure {}
 
 
 # puts game

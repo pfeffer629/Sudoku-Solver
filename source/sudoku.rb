@@ -11,6 +11,7 @@ class Sudoku
   end
 
   def solve
+    @no_hits = 0
     until is_incomplete? == false
       find_blank
     end
@@ -31,6 +32,7 @@ class Sudoku
           check_box
           number_check
           insert_number
+          escape_if_complex
         end
       end
     end
@@ -64,6 +66,7 @@ class Sudoku
   def number_check
     @check_arr = @check_arr.uniq.sort
     if @check_arr.length == 8
+      @no_hits = 0
       @missing_number = "X"
       9.times do |n|
         unless @check_arr.include?(@poss_arr[n])
@@ -71,6 +74,7 @@ class Sudoku
         end
       end
     else
+      @no_hits += 1
       false
     end
   end
@@ -78,6 +82,12 @@ class Sudoku
   def insert_number
     if number_check
       @board_arr[@blank_pos[0]][@blank_pos[1]] = @missing_number
+    end
+  end
+
+  def escape_if_complex
+    if @no_hits >= 81
+      abort("This problem is too complex for this Sudoku solver")
     end
   end
 
