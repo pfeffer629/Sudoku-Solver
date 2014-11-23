@@ -58,7 +58,7 @@ class Sudoku
     solution = check_row(coordinates) & check_column(coordinates) & check_box(coordinates)
 
     if solution.length == 1
-      solution[0]
+      solution.first
     else
       "-" # only gets returned if no unique solution is found
     end
@@ -86,26 +86,10 @@ class Sudoku
 
   # returns 1D array containing local box values based on coordinates
   # which handily matches the format required by the find_possibilities_in_row method
+  # Could probably benefit from some sort of floor method rather than the confusing
+  # (x / 3) * 3 thing.
   def local_box(coordinates)
-    if ((0..2).include?(coordinates[0]) && (0..2).include?(coordinates[1])) # top left
-      build_box(0, 0)
-    elsif ((0..2).include?(coordinates[0]) && (3..5).include?(coordinates[1])) # top middle
-      build_box(0,3)
-    elsif ((0..2).include?(coordinates[0]) && (6..8).include?(coordinates[1])) # top right
-      build_box(0,6)
-    elsif ((3..5).include?(coordinates[0]) && (0..2).include?(coordinates[1])) # middle left
-      build_box(3,0)
-    elsif ((3..5).include?(coordinates[0]) && (3..5).include?(coordinates[1])) # middle
-      build_box(3,3)
-    elsif ((3..5).include?(coordinates[0]) && (6..8).include?(coordinates[1])) # middle right
-      build_box(3,6)
-    elsif ((6..8).include?(coordinates[0]) && (0..2).include?(coordinates[1])) # bottom left
-      build_box(6,0)
-    elsif ((6..8).include?(coordinates[0]) && (3..5).include?(coordinates[1])) # bottom middle
-      build_box(6,3)
-    elsif ((6..8).include?(coordinates[0]) && (6..8).include?(coordinates[1])) # bottom right
-      build_box(6,6)
-    end
+    build_box((coordinates[0]/3)*3, (coordinates[1]/3)*3)
   end
 
   def build_box(x, y)
@@ -129,5 +113,9 @@ end
 board = Sudoku.new('---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---'
 )
 p board.board
-board.solve
-puts board
+p board.solve
+
+board = Sudoku.new('--5-3--819-285--6-6----4-5---74-283-34976---5--83--49-15--87--2-9----6---26-495-3'
+)
+p board.board
+p board.solve
