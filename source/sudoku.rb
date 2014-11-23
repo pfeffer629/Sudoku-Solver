@@ -8,14 +8,14 @@ class Sudoku
     has_found_empty_cell = true
     while has_found_empty_cell
       has_found_empty_cell = false
-      
+
       @board.map!.with_index do |row, outer_counter|
-        
+
         row.map.with_index do |cell, inner_counter|
           coordinates = [outer_counter, inner_counter] # Equivalent to (y, x)
-          
+
           if empty?(cell)
-            has_found_empty_cell = true  
+            has_found_empty_cell = true
             find_cell_solution(coordinates)
           else
             cell
@@ -80,33 +80,16 @@ class Sudoku
   end
 
   def find_possibilities_in_row(row)
-    ("1".."9").to_a - row 
+    ("1".."9").to_a - row
   end
 
   # returns 1D array containing local box values based on coordinates
   # which handily matches the format required by the find_possibilities_in_row method
   def local_box(coordinates)
-    if ((0..2).include?(coordinates[0]) && (0..2).include?(coordinates[1])) # top left
-      build_box(0, 0)
-    elsif ((0..2).include?(coordinates[0]) && (3..5).include?(coordinates[1])) # top middle
-      build_box(0,3)
-    elsif ((0..2).include?(coordinates[0]) && (6..8).include?(coordinates[1])) # top right
-      build_box(0,6)
-    elsif ((3..5).include?(coordinates[0]) && (0..2).include?(coordinates[1])) # middle left
-      build_box(3,0)
-    elsif ((3..5).include?(coordinates[0]) && (3..5).include?(coordinates[1])) # middle
-      build_box(3,3)
-    elsif ((3..5).include?(coordinates[0]) && (6..8).include?(coordinates[1])) # middle right
-      build_box(3,6)
-    elsif ((6..8).include?(coordinates[0]) && (0..2).include?(coordinates[1])) # bottom left
-      build_box(6,0)
-    elsif ((6..8).include?(coordinates[0]) && (3..5).include?(coordinates[1])) # bottom middle
-      build_box(6,3)
-    elsif ((6..8).include?(coordinates[0]) && (6..8).include?(coordinates[1])) # bottom right
-      build_box(6,6)
-    end
+    build_box(coordinates[0]/3, coordinates[1]/3)
   end
 
+  # Probably a better way to do this one too.
   def build_box(x, y)
       [@board[x][y],
       @board[x+1][y],
@@ -119,8 +102,6 @@ class Sudoku
       @board[x+2][y+2]]
   end
 
-
-
 end
 
 # Admire our exhaustive test suite:
@@ -128,5 +109,3 @@ end
 board = Sudoku.new('---26-7-168--7--9-19---45--82-1---4---46-29---5---3-28--93---74-4--5--367-3-18---'
 )
 p board.board
-board.solve
-puts board
